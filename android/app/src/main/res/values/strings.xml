@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ONE CONNECT</string>
+    <string name="talkButton">トーク</string>
+    <string name="mypageButton">マイページ</string>
+    <string name="shopButton">ショップ</string>
+    <string name="missionButton">ミッション</string>
+    <string name="title_activity_login">ONE CONNECT</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">メールアドレス</string>
+    <string name="prompt_password">パスワード</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">ログイン</string>
+    <string name="error_invalid_email">メールアドレスまたはパスワードが正しくありません</string>
+    <string name="error_invalid_password">パスワードが短すぎます</string>
+    <string name="error_incorrect_password">メールアドレスまたはパスワードが正しくありません</string>
+    <string name="error_field_required">この欄を入力してください</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
