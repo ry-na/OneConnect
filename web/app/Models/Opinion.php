@@ -51,17 +51,4 @@ class Opinion extends BaseModel
         self::LON,
         self::CREATED_AT
     ];
-
-    /**
-     * @param $request
-     */
-    public function register(array $request)
-    {
-        static::create([
-            static::USER_ID => $request[static::USER_ID],
-            static::OPINION_MESSAGE => $request[static::OPINION_MESSAGE],
-            static::LAT => $request[static::LAT],
-            static::LON => $request[static::LON],
-        ])->save();
-    }
 }
