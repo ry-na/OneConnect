@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <script>
     var token = '{{ csrf_token() }}';
-    var url = '{{ config('app.url') }}/api/v1/opinion/get'
-    var data = '{"{{ \App\Models\User::EMAIL }}" : "1connect.5.2017@gmail.com", "{{ \App\Models\User::PASS }}" : "{{  hash(config('app.hash'), 'passpass') }}"}';
+    var url = '{{ config('app.url') }}/api/v1/opinion/register'
+    var data = '{"{{ \App\Models\Opinion::USER_ID }}" : "1", "{{ \App\Models\Opinion::OPINION_MESSAGE }}" : "テストメッセージ", "{{ \App\Models\Opinion::LAT }}" : 35.014229, "{{ \App\Models\Opinion::LON }}" : 135.748218}';
     var request = new XMLHttpRequest();
     request.open('POST', url);
     request.setRequestHeader('X-CSRF-TOKEN', token);

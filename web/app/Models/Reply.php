@@ -2,19 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 
 /**
  * @author Ryo Natori <ryo.natori0809@gmail.com>
  */
-class Reply extends Authenticatable
+class Reply extends BaseModel
 {
     const TABLE = 'replies';
-    /**
-     * REPLY_ID
-     */
-    const REPLY_ID = 'reply_id';
+
     /**
      * OPINION_ID
      */
@@ -32,7 +27,7 @@ class Reply extends Authenticatable
      * @see https://readouble.com/laravel/5.3/ja/eloquent.html
      */
     protected $guarded = [
-        self::REPLY_ID
+        self::ID
     ];
 
     /**
@@ -43,6 +38,6 @@ class Reply extends Authenticatable
         self::OPINION_ID,
         self::USER_ID,
         self::REPLY_MESSAGE,
-        "created_at",
+        self::CREATED_AT
     ];
 }

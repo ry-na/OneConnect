@@ -14,7 +14,7 @@ class CreateOpinionsTable extends Migration
     public function up()
     {
         Schema::create(\App\Models\Opinion::TABLE, function (Blueprint $table) {
-            $table->increments(\App\Models\Opinion::OPINION_ID);
+            $table->increments(\App\Models\Opinion::ID);
             $table->timestamps();
             $table->softDeletes();
             $table->string(\App\Models\Opinion::USER_ID);

@@ -14,7 +14,7 @@ class CreateRepliesTable extends Migration
     public function up()
     {
         Schema::create(\App\Models\Reply::TABLE, function (Blueprint $table) {
-            $table->increments(\App\Models\Reply::REPLY_ID);
+            $table->increments(\App\Models\Reply::ID);
             $table->timestamps();
             $table->softDeletes();
             $table->string(\App\Models\Reply::OPINION_ID);

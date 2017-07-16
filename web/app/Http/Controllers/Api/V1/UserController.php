@@ -37,7 +37,7 @@ class UserController extends V1Controller
                 ]
             );
         }
-        User::registerUser($request->all());
+        User::register($request->all());
         return $this->json();
     }
 

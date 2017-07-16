@@ -2,19 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-
 /**
  * @author Ryo Natori <ryo.natori0809@gmail.com>
  */
-class User extends Authenticatable
+class User extends BaseModel
 {
     const TABLE = 'users';
-    /**
-     * ID
-     */
-    const ID = 'id';
+
     /**
      * EMAIL
      */
@@ -39,11 +33,11 @@ class User extends Authenticatable
     /**
      * @param $request
      */
-    public static function registerUser(array $request)
+    public static function register(array $request)
     {
-        self::create([
-            self::EMAIL => $request[static::EMAIL],
-            self::PASS => $request[static::PASS],
+        static::create([
+            static::EMAIL => $request[static::EMAIL],
+            static::PASS => $request[static::PASS],
         ])->save();
     }
 

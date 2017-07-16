@@ -2,19 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 
 /**
  * @author Ryo Natori <ryo.natori0809@gmail.com>
  */
-class Opinion extends Authenticatable
+class Opinion extends BaseModel
 {
     const TABLE = 'opinions';
-    /**
-     * OPINION_ID
-     */
-    const OPINION_ID = 'opinion_id';
+
     /**
      * USER_ID
      */
@@ -40,7 +35,7 @@ class Opinion extends Authenticatable
      * @see https://readouble.com/laravel/5.3/ja/eloquent.html
      */
     protected $guarded = [
-        self::OPINION_ID
+        self::ID
     ];
 
     /**
@@ -48,12 +43,25 @@ class Opinion extends Authenticatable
      * @var array
      */
     public static $gettableColumns = [
-        self::OPINION_ID,
+        self::ID,
         self::USER_ID,
         self::EVENT_ID,
         self::OPINION_MESSAGE,
         self::LAT,
         self::LON,
-        "created_at",
+        self::CREATED_AT
     ];
+
+    /**
+     * @param $request
+     */
+    public function register(array $request)
+    {
+        static::create([
+            static::USER_ID => $request[static::USER_ID],
+            static::OPINION_MESSAGE => $request[static::OPINION_MESSAGE],
+            static::LAT => $request[static::LAT],
+            static::LON => $request[static::LON],
+        ])->save();
+    }
 }
