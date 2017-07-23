@@ -1,7 +1,8 @@
 # OneConnect
 
 ## インストール
-https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/Git-2.13.0-64-bit.exe  
+URLがWindows前提のため注意  
+https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/Git-2.13.0-64-bit.exe  
 https://download.tortoisegit.org/tgit/2.4.0.0/TortoiseGit-2.4.0.2-64bit.msi
 
 ## クローン
