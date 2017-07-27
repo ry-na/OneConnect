@@ -11,13 +11,9 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.fragment_info.*
+import localhost.android.Presenter.InfoFragmentPresenter
 import localhost.android.R
-import localhost.android.config.Network
-import localhost.android.model.PostResponseData
 import localhost.android.model.ReplyResponseData
-import localhost.android.network.NetworkService.Companion.sendHttpPostRequest
-import java.io.Serializable
 
 /**
  * A simple [Fragment] subclass.
@@ -28,26 +24,30 @@ import java.io.Serializable
  * create an instance of this fragment.
  */
 class InfoFragment : DialogFragment() {
-    internal var title = ""
-    internal var detail = ""
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    private var title = ""
+    private var detail = ""
 
-        val dialog = Dialog(activity)
-        // タイトル非表示
-        dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
-        // フルスクリーン
-        dialog.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-        dialog.setContentView(R.layout.fragment_info)
-        // 背景を透明にする
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.findViewById(R.id.connect_button).setOnClickListener {
-            //TODO:コネクトボタン押下
-            getReply()
+    private val presenter = InfoFragmentPresenter()
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Dialog(activity).let {
+            // タイトル非表示
+            it.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+            // フルスクリーン
+            it.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+            it.setContentView(R.layout.fragment_info)
+            // 背景を透明にする
+            it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.findViewById(R.id.connect_button).setOnClickListener {
+                //TODO:コネクトボタン押下
+                // TODO: IDを取得できるようにする
+                presenter.getReply(hashMapOf("id" to id.toString())) { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) }
+            }
+            it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
+            (it.findViewById(R.id.m_title) as TextView).text = title
+            (it.findViewById(R.id.m_detail) as TextView).text = detail
+            return it
         }
-        dialog.findViewById(R.id.close_button).setOnClickListener { dismiss() }
-        (dialog.findViewById(R.id.m_title) as TextView).text = title
-        (dialog.findViewById(R.id.m_detail) as TextView).text = detail
-        return dialog
     }
 
     override fun show(m: android.support.v4.app.FragmentManager, tag: String) {
@@ -57,26 +57,24 @@ class InfoFragment : DialogFragment() {
         this.detail = data[1]
     }
 
-    private fun getReply() = sendHttpPostRequest(Network.OPINION_API_URL + Network.REPLY, hashMapOf("opinion_id" to this.id.toString()), { status: Boolean, response: List<Serializable?>? -> replyResult(status, response) })
-
-    private fun replyResult(status: Boolean, response: List<Serializable?>?) {
-        if (status && response != null) {
-            val responseList = arrayListOf<String>()
-            response.forEach {
-                if (it is PostResponseData) {
-                    responseList.add("$it.user_id $it.reply_message  $it.created_at")
-                }
-            }
-            val arrayAdapter = ArrayAdapter<String>(
-                    activity,
-                    R.layout.list_replies,
-                    responseList
-            )
-            val myListView = dialog.findViewById(R.id.replies_list)
-            if (myListView is ListView) {
-                myListView.adapter = arrayAdapter
+    private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
+        if (!status) return
+        // ここから仮実装。デザイン実装とともに作り直す必要あり
+        val responseList = arrayListOf<String>()
+        response.forEach {
+            if (it is ReplyResponseData) {
+                println(it.toString())
+                responseList.add("$it.user_id $it.reply_message  $it.created_at")
             }
         }
+        val arrayAdapter = ArrayAdapter<String>(
+                activity,
+                R.layout.list_replies,
+                responseList
+        )
+        val myListView = dialog.findViewById(R.id.replies_list)
+        if (myListView is ListView) {
+            myListView.adapter = arrayAdapter
+        }
     }
-
 }

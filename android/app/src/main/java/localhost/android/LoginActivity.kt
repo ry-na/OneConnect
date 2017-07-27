@@ -18,10 +18,6 @@ import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
 import localhost.android.Presenter.LoginActivityPresenter
-import localhost.android.config.Network
-import localhost.android.model.PostResponseData
-import localhost.android.network.NetworkService
-import java.io.Serializable
 import java.util.*
 
 /**
@@ -38,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        presenter  = LoginActivityPresenter(this)
+        presenter = LoginActivityPresenter(this)
 
         password_text.setOnEditorActionListener(TextView.OnEditorActionListener { textView, id, keyEvent ->
             if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -90,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
      * *
      * @return
      */
-    fun convertDp2Px(dp: Float, context: Context): Float {
+    private fun convertDp2Px(dp: Float, context: Context): Float {
         val metrics = context.resources.displayMetrics
         return dp * metrics.density
     }
@@ -112,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Store values at the time of the login attempt.
         val email = email_text.text.toString()
-        var password = password_text.text.toString()
+        val password = password_text.text.toString()
 
         var cancel = false
 
@@ -138,11 +134,11 @@ class LoginActivity : AppCompatActivity() {
         // Show a progress spinner, and kick off a background task to
         // perform the user login attempt.
         showProgress(true)
-        password = LoginActivityPresenter.Hashing(password) //SHA-256ハッシュ化
-        val m = HashMap<String, String>()
-        m.put("email", email)
-        m.put("pass", password)
-        NetworkService.sendHttpPostRequest(Network.USER_API_URL + Network.LOGIN, m) { status: Boolean, response: List<Serializable?>? -> presenter.loginResult(status, response) }
+        val m = HashMap<String, String>().apply {
+            put("email", email)
+            put("pass", LoginActivityPresenter.Hashing(password))//SHA-256ハッシュ化
+        }
+        presenter.sendLoginRequest(m)
 
         //presenter.mAuthTask = presenter.UserLoginTask(email, password)
         //presenter.mAuthTask!!.execute(null as Void?)

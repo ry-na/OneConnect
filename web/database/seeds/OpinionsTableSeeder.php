@@ -21,7 +21,7 @@ class OpinionsTableSeeder extends Seeder
                 \App\Models\Opinion::EVENT_ID => null,
                 \App\Models\Opinion::OPINION_MESSAGE => "テスト01メッセージ",
                 \App\Models\Opinion::LAT => 35.689634,
-                \App\Models\Opinion::LON => 139.692100
+                \App\Models\Opinion::LON => 139.692101
             ],
             [
                 \App\Models\Opinion::USER_ID => 2,

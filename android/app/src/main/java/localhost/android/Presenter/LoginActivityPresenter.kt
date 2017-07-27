@@ -2,28 +2,32 @@ package localhost.android.Presenter
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.preference.PreferenceManager
-import android.support.v4.content.ContextCompat.startActivity
 import android.text.TextUtils
 import android.util.Base64
 import localhost.android.LoginActivity
 import localhost.android.MainActivity
-import localhost.android.model.PostResponseData
+import localhost.android.model.LoginResponseData
+import localhost.android.network.NetworkInterface
+import localhost.android.network.NetworkService
 import localhost.android.util.AndroidKeyStoreManager
-import java.io.Serializable
+import retrofit2.adapter.rxjava.HttpException
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.*
 import java.util.regex.Pattern
 
 @Suppress("UNREACHABLE_CODE")
-public class LoginActivityPresenter(private val loginActivity: LoginActivity) {
+class LoginActivityPresenter(private val loginActivity: LoginActivity) {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     //var mAuthTask: UserLoginTask? = null
-    val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(loginActivity);
-    val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(loginActivity);
+    private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(loginActivity)
+    private val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(loginActivity)
 
     companion object {
         fun isPasswordValid(password: String): Boolean {
@@ -46,7 +50,7 @@ public class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                 return bytesToHexString(digest.digest()) //SHA-256ハッシュ化
                 digest.update(password.toByteArray())
             } catch (e: NoSuchAlgorithmException) {
-                e.printStackTrace();
+                e.printStackTrace()
                 return ""
             }
         }
@@ -65,7 +69,42 @@ public class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         }
     }
 
-    fun loginResult(status: Boolean, response: List<Serializable?>?) {
+    fun sendLoginRequest(body: HashMap<String, String>?) {
+        val retrofit = NetworkService.getRetrofit()
+        retrofit.create(NetworkInterface::class.java)
+                .login("", body)    // TODO: 第1引数で if(sId == null) "" else sId こんな関数を呼ぶ
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<List<LoginResponseData?>>() {
+                    /**
+                     * 完了
+                     */
+                    override fun onCompleted() {
+                        println("OK")
+                    }
+
+                    /**
+                     * 失敗
+                     */
+                    override fun onError(e: Throwable?) {
+                        e!!.printStackTrace()
+                        if (e is HttpException) {
+                            val a = object : Annotation {}
+                            loginResult(false, retrofit.responseBodyConverter<List<LoginResponseData?>>(LoginResponseData::class.java, arrayOf(a))
+                                    .convert(e.response().errorBody()))
+                        } else loginResult(false, listOf(LoginResponseData()))
+                    }
+
+                    /**
+                     * 成功
+                     */
+                    override fun onNext(t: List<LoginResponseData?>?) {
+                        loginResult(true, t)
+                    }
+                })
+    }
+
+    fun loginResult(status: Boolean, response: List<LoginResponseData?>?) {
         //mAuthTask = null
         loginActivity.showProgress(false)
 
@@ -74,8 +113,10 @@ public class LoginActivityPresenter(private val loginActivity: LoginActivity) {
             val editor = sharedPreferences.edit()
             val SID = ""  //←SIDを代入する
             val SID_ = mKeyStoreManager.encrypt(SID.toByteArray())
-            editor.putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
-            editor.commit()
+            editor.apply {
+                putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
+                commit()
+            }
             //TODO: メイン画面に推移する
             val intent = Intent(loginActivity, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

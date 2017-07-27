@@ -17,64 +17,63 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.SectionDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.Nameable
 import kotlinx.android.synthetic.main.activity_main.*
-import localhost.android.config.Network
+import localhost.android.Presenter.MainActivityPresenter
 import localhost.android.fragment.InfoFragment
-import localhost.android.model.GetResponseData
-import localhost.android.network.NetworkService
-import java.io.Serializable
+import localhost.android.model.OpinionResponseData
 import java.util.*
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-    var Places: ArrayList<Place> = ArrayList()
+    private val places: ArrayList<Place> = ArrayList()
+    private val presenter = MainActivityPresenter()
     override fun onMapReady(googleMap: GoogleMap) {
-        val success = googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                        this, R.raw.map))
+        googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
+        )
         googleMap.run {
             setMinZoomPreference(8.0f)
             setMaxZoomPreference(19.0f)
             val d = LatLng(35.455865, 139.633103)
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d, 12F));
-            for (p in Places) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d, 12F))
+            for (p in places) {
                 val ll = LatLng(p.lat.toDouble(), p.lng.toDouble())
-                val m = googleMap.addMarker(MarkerOptions()
+                googleMap.addMarker(MarkerOptions()
                         .position(ll)
                         .title(p.title)
                         .snippet(p.detail)
                 )
-
             }
+            // TODO: IDをFragment側で取得できるようにする
             setOnMarkerClickListener { marker ->
-                val detail = marker.getSnippet()
+                val detail = marker.snippet
                 val newFragment = InfoFragment()
-                newFragment.show(getSupportFragmentManager(), marker.getTitle() + "," + detail)
+                newFragment.show(supportFragmentManager, marker.title + "," + detail)
                 false
             }
         }
     }
 
-    // internal var tool_bar: Toolbar? =null
-    internal var result: Drawer? = null
-    //  internal var map: MapFragment? = null
-    var mf: MapFragment? = null
+    private lateinit var result: Drawer
+    private lateinit var mf: MapFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(tool_bar)
-//TODO:Placesに追加
+        //TODO:Placesに追加
         //仮データ
         val p = Place()
-        p.id = 0
-        p.title = "テスト"
-        p.detail = "ああああ"
-        p.lat = 35.774337
-        p.lng = 139.707746
-        Places.add(p)
-        getOpinion()
+        p.run {
+            id = 0
+            title = "テスト"
+            detail = "ああああ"
+            lat = 35.774337
+            lng = 139.707746
+        }
+        places.add(p)
+        presenter.getOpinion { status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) }
         mf = MapFragment.newInstance()
-        mf!!.getMapAsync(this@MainActivity)
+        mf.getMapAsync(this@MainActivity)
         //  if (map == null) map = MapFragment()
         val item1 = PrimaryDrawerItem().withName("ONE CONNECT").withDescription("<アカウント名>")
         val item2 = SecondaryDrawerItem().withName("マップ")
@@ -118,24 +117,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .build()
     }
 
-
-    fun getOpinion() {
-        NetworkService.sendHttpGetRequest(Network.OPINION_API_URL + Network.GET) { status: Boolean, response: List<Serializable?>? -> opinionResult(status, response) }
-    }
-
-    private fun opinionResult(status: Boolean, response: List<Serializable?>?) {
-        if (status && response != null) {
-            response.forEach {
-                if (it is GetResponseData) {
-                    println(it.toString())
-                    val p = Place()
-                    p.id = it.opinion_id.toInt()
-                    p.title = it.opinion_message
-                    p.detail = it.opinion_message
-                    p.lat = it.lat.toDouble()
-                    p.lng = it.lon.toDouble()
-                    Places.add(p)
+    private fun opinionResult(status: Boolean, response: List<OpinionResponseData?>) {
+        if (!status) return
+        response.forEach { data ->
+            if (data is OpinionResponseData) {
+                val p = Place()
+                p.run {
+                    id = data.id.toInt()
+                    title = data.opinion_message
+                    detail = data.opinion_message
+                    lat = data.lat.toDouble()
+                    lng = data.lon.toDouble()
                 }
+                places.add(p)
             }
         }
     }
