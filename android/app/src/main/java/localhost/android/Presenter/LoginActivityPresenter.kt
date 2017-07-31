@@ -122,7 +122,7 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             loginActivity.startActivity(intent)
         } else {
-            //エラーメッセージ表示
+            //TODO :エラーメッセージ表示
             loginActivity.setEmailError("エラー内容")
         }
         //return null

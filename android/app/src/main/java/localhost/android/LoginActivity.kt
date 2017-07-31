@@ -9,16 +9,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.ScaleAnimation
-import android.view.animation.TranslateAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
 import localhost.android.Presenter.LoginActivityPresenter
 import java.util.*
+import android.support.v4.view.ViewCompat.setTranslationY
+import android.animation.ValueAnimator
+import android.support.v4.view.ViewCompat.setTranslationY
+import android.view.animation.*
+
 
 /**
  * A login screen that offers login via email/password.
@@ -47,17 +48,18 @@ class LoginActivity : AppCompatActivity() {
         val mEmailSignInButton = findViewById(R.id.email_sign_in_button) as Button
         mEmailSignInButton.setOnClickListener { attemptLogin() }
 
-        login_form.visibility = View.GONE
+        login_form.visibility = View.INVISIBLE
         Thread(Runnable {
             if (!presenter.init_Login()) {
                 handler.post {
-                    val x = login_logo.translationX
-                    val animation_scale = ScaleAnimation(1.0f, 0.5f, 1.0f, 0.5f)
-                    animation_scale.duration = 500L
-                    val animation_translate = TranslateAnimation(x, 0.0f, x, -convertDp2Px(150.0f, applicationContext))
+
+                    val x = login_logo.left
+                    val left = login_logo.left.toFloat()
+                    val top = login_logo.top.toFloat()
+                    val animation_translate = TranslateAnimation(0.0f, 0.0f, 0.0f,-top+(login_logo.measuredHeight/2))
                     animation_translate.duration = 500L
                     val animation_set = AnimationSet(false)
-
+                    animation_set.interpolator= AccelerateDecelerateInterpolator()
                     animation_set.addAnimation(animation_translate)
                     animation_set.fillAfter = true
                     animation_set.isFillEnabled = true
