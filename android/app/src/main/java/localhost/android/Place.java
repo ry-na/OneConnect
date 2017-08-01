@@ -10,5 +10,6 @@ public class Place {
         public Double lat;
         public Double lng;
         public String detail;
+        public int type; //0=ミッション;1=オピニオン
     }
 

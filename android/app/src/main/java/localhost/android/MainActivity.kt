@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
@@ -19,6 +20,8 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable
 import kotlinx.android.synthetic.main.activity_main.*
 import localhost.android.Presenter.MainActivityPresenter
 import localhost.android.fragment.InfoFragment
+import localhost.android.fragment.OpinionFragment
+import localhost.android.fragment.Opinion_new
 import localhost.android.model.OpinionResponseData
 import java.util.*
 
@@ -26,6 +29,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val places: ArrayList<Place> = ArrayList()
     private val presenter = MainActivityPresenter()
+
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -40,14 +44,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 googleMap.addMarker(MarkerOptions()
                         .position(ll)
                         .title(p.title)
-                        .snippet(p.detail)
+                        .snippet(p.type.toString() + p.detail)
+                        .icon(BitmapDescriptorFactory.defaultMarker(if(p.type==0)BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_BLUE)) //TODO: 仮に色分け
                 )
             }
             // TODO: IDをFragment側で取得できるようにする
+           setOnMapLongClickListener { latlng ->
+               var newFragment = Opinion_new()
+               newFragment.show(supportFragmentManager, latlng.latitude.toString()+","+latlng.longitude.toString())
+           }
             setOnMarkerClickListener { marker ->
-                val detail = marker.snippet
-                val newFragment = InfoFragment()
-                newFragment.show(supportFragmentManager, marker.title + "," + detail)
+                val detail = marker.snippet.substring(1,marker.snippet.lastIndex)
+
+if(marker.snippet.substring(0,1).equals("0")) {
+   var newFragment = InfoFragment()
+    newFragment.show(supportFragmentManager, marker.title + "," + detail)
+}else   if(marker.snippet.substring(0,1).equals("1")) {
+    var newFragment = OpinionFragment()
+    newFragment.show(supportFragmentManager, marker.title + "," + detail)
+}
                 false
             }
         }
@@ -65,6 +80,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val p = Place()
         p.run {
             id = 0
+            type= 0
             title = "テスト"
             detail = "ああああ"
             lat = 35.774337
@@ -122,8 +138,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         response.forEach { data ->
             if (data is OpinionResponseData) {
                 val p = Place()
+
                 p.run {
                     id = data.id.toInt()
+                    type=1
                     title = data.opinion_message
                     detail = data.opinion_message
                     lat = data.lat.toDouble()
