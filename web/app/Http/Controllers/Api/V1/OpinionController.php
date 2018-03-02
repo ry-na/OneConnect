@@ -16,10 +16,22 @@ class OpinionController extends V1Controller
     const PREFIX = 'opinion';
 
     /**
+     *
+     * @return mixed
+     */
+    public function get()
+    {
+        return $this->json(
+            200,
+            Opinion::get(Opinion::$gettableColumns)
+        );
+    }
+
+    /**
      * @param Request $request
      * @return mixed
      */
-    public function get_reply(Request $request)
+    public function getReply(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
@@ -40,66 +52,6 @@ class OpinionController extends V1Controller
             200,
             Reply::where('opinion_id', $request[Reply::OPINION_ID])->get(Reply::$gettableColumns)
         );
-    }
-
-    /**
-     *
-     * @return mixed
-     */
-    public function get()
-    {
-        return $this->json(
-            200,
-            Opinion::get(Opinion::$gettableColumns)
-        );
-    }
-
-    /**
-     *
-     * @param Request $request
-     * @return mixed
-     */
-    public function reply(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                Reply::USER_ID => 'required',
-                Reply::OPINION_ID => 'required',
-                Reply::REPLY_MESSAGE => 'required|max:1000'  // TODO: 文字数はUI見て最大数を決める
-            ]
-        );
-        if ($validator->fails()) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => $validator->errors()->all()
-                ]
-            );
-        }
-        $reply = new Reply();
-        $reply{Reply::USER_ID} = $request[Reply::USER_ID];
-        $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
-        $reply{Reply::REPLY_MESSAGE} = $request[Reply::REPLY_MESSAGE];
-        if (!$reply->save()) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => "Insert失敗"
-                ]
-            );
-        }
-        return $this->json(
-            200,
-            [
-                Reply::CREATED_AT => $reply->{Reply::CREATED_AT}
-            ]
-        );
-        /*  return $this->json(
-              200,
-              Reply::where(Reply::OPINION_ID, $request->{Reply::OPINION_ID})
-                  ->get(Reply::$gettableColumns)
-          );*/
     }
 
     /**
@@ -145,6 +97,49 @@ class OpinionController extends V1Controller
             [
                 Opinion::ID => $opinion->{Opinion::ID},
                 Opinion::CREATED_AT => $opinion->{Opinion::CREATED_AT}
+            ]
+        );
+    }
+
+    /**
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function reply(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                Reply::USER_ID => 'required',
+                Reply::OPINION_ID => 'required',
+                Reply::REPLY_MESSAGE => 'required|max:1000'  // TODO: 文字数はUI見て最大数を決める
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => $validator->errors()->all()
+                ]
+            );
+        }
+        $reply = new Reply();
+        $reply{Reply::USER_ID} = $request[Reply::USER_ID];
+        $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
+        $reply{Reply::REPLY_MESSAGE} = $request[Reply::REPLY_MESSAGE];
+        if (!$reply->save()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => "Insert失敗"
+                ]
+            );
+        }
+        return $this->json(
+            200,
+            [
+                Reply::CREATED_AT => $reply->{Reply::CREATED_AT}
             ]
         );
     }
