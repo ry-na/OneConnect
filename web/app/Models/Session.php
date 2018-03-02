@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use App\Models\User;
 /**
  * @author Takahiro Otani <taka.oot@gmail.com>
  */
@@ -18,10 +18,6 @@ class Session extends BaseModel
      * USER_ID
      */
     const USER_ID = 'user_id';
-    /**
-     * time
-     */
-    const TIME = 'time';
     /**
      * IP
      */
@@ -41,18 +37,16 @@ class Session extends BaseModel
     public static $gettableColumns = [
         self::SESSION_ID,
         self::USER_ID,
-        self::TIME,
         self::IP
     ];
 
-       public static function register(array $session)
+       public static function register($user,$ip)
     {
-           $sid=bin2hex(random_bytes(256));
+           $sid=bin2hex(random_bytes(32)); //256bit
         static::create([
-            static::SESSION_ID => $request[static::EMAIL],
-            static::USER_ID => $session[static::USER_ID],
-            static::TIME => time(),
-            static::IP => $session[static::IP]
+            static::SESSION_ID => $sid,
+            static::USER_ID => $user->{User::EMAIL},
+            static::IP => $ip
         ])->save();
            return $sid;
     }

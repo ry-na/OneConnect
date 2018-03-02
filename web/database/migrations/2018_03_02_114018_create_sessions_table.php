@@ -15,9 +15,10 @@ class CreateSessionsTable extends Migration
     {
         Schema::create(\App\Models\Session::TABLE, function (Blueprint $table) {
             $table->increments(\App\Models\Session::ID);
-            $table->dateTime(\App\Models\Session::TIME);
+             $table->timestamps();
             $table->softDeletes();
             $table->string(\App\Models\Session::USER_ID);
+            $table->string(\App\Models\Session::SESSION_ID);
             $table->ipAddress(\App\Models\Session::IP);
         });
     }
