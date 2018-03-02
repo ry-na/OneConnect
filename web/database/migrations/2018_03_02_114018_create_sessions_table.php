@@ -18,7 +18,7 @@ class CreateSessionsTable extends Migration
             $table->dateTime(\App\Models\Session::TIME);
             $table->softDeletes();
             $table->string(\App\Models\Session::USER_ID);
-              $table->ipAddress(\App\Models\Session::IP);
+            $table->ipAddress(\App\Models\Session::IP);
         });
     }
 
@@ -29,6 +29,6 @@ class CreateSessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(\App\Models\Reply::TABLE);
+        Schema::dropIfExists(\App\Models\Session::TABLE);
     }
 }
