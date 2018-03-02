@@ -34,11 +34,45 @@ class OpinionController extends V1Controller
      */
     public function reply(Request $request)
     {
-        return $this->json(
+                $validator = Validator::make(
+            $request->all(),
+            [
+                Reply::USER_ID => 'required',
+                Reply::OPINION_ID => 'required',
+                Reply::REPLY_MESSAGE => 'required|max:1000'  // TODO: 文字数はUI見て最大数を決める
+            ]
+        );
+                if ($validator->fails()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => $validator->errors()->all()
+                ]
+            );
+        }
+         $reply = new Reply();
+        $reply{Reply::USER_ID} = $request[Reply::USER_ID];
+         $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
+        $reply{Reply::REPLY_MESSAGE} = $request[Reply::REPLY_MESSAGE];
+               if (!$reply->save()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => "Insert失敗"
+                ]
+            );
+        }
+                return $this->json(
+            200,
+            [
+                Reply::CREATED_AT => $reply->{Reply::CREATED_AT}
+            ]
+        );
+      /*  return $this->json(
             200,
             Reply::where(Reply::OPINION_ID, $request->{Reply::OPINION_ID})
                 ->get(Reply::$gettableColumns)
-        );
+        );*/
     }
 
     /**
