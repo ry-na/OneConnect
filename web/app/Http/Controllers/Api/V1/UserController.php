@@ -82,7 +82,7 @@ class UserController extends V1Controller
         return $this->json(
             200,
             [[
-                User::SESSION_ID => $loginUser->registerSId(),
+                Session::SESSION_ID => Session::register($loginUser->{User::EMAIL})
             ]]
         );
     }
