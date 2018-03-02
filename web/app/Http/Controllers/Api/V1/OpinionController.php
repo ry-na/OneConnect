@@ -16,6 +16,18 @@ class OpinionController extends V1Controller
     const PREFIX = 'opinion';
 
     /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function get_reply(Request $request)
+    {
+        return $this->json(
+            200,
+            Reply::where('opinion_id', $request[Reply::OPINION_ID])->get(Reply::$gettableColumns)
+        );
+    }
+
+       /**
      *
      * @return mixed
      */
