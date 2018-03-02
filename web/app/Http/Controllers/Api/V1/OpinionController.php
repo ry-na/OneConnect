@@ -21,6 +21,21 @@ class OpinionController extends V1Controller
      */
     public function get_reply(Request $request)
     {
+                        $validator = Validator::make(
+            $request->all(),
+            [
+                Reply::OPINION_ID => 'required'
+            ]
+        );
+                if ($validator->fails()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => $validator->errors()->all()
+                ]
+            );
+        }
+
         return $this->json(
             200,
             Reply::where('opinion_id', $request[Reply::OPINION_ID])->get(Reply::$gettableColumns)
