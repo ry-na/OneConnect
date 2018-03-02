@@ -52,6 +52,12 @@ class Session extends BaseModel
 public static function ErrorCode_Public($error){
 return ($error >> 4) << 4;
 }
+public static function SID2ID($request){
+  $sid = $request->header(static::SESSION_ID);
+$col =Session::where(static::SESSION_ID, $sid)->get()->first();
+if(!$col)return "";
+return $col->{Session::USER_ID};
+}
 public static function Auth($request) {
   $sid = $request->header(static::SESSION_ID);
  $col = Session::where(static::SESSION_ID, $sid)->get()->first();
@@ -61,7 +67,7 @@ $time=$col->{Session::CREATED_AT}->timestamp;
  if(time()-$time>static::TIMEOUT)return static::AUTH_ERROR_TIMEOUT;
 //CHECK2:IP
 $ip=$col->{Session::IP};
-if($col!==$ip)return static::AUTH_ERROR_INVALIDIP;
+if($request->ip()!=$ip)return static::AUTH_ERROR_INVALIDIP;
 return static::AUTH_SUCCESS;
 }
        public static function register($user,$ip)
