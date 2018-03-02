@@ -26,8 +26,8 @@ import localhost.android.model.ReplyResponseData
  * create an instance of this fragment.
  */
 class Opinion_new : DialogFragment() {
-var lat = 0.0
-    var lng=0.0
+    var lat = 0.0
+    var lng = 0.0
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Dialog(activity).let {
             // タイトル非表示
@@ -43,7 +43,7 @@ var lat = 0.0
 
             }
             it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
-          (it.findViewById(R.id.m_title) as TextView).text ="場所："+lat+","+lng
+            (it.findViewById(R.id.m_title) as TextView).text = "場所：" + lat + "," + lng
             return it
         }
     }
@@ -51,7 +51,7 @@ var lat = 0.0
     override fun show(m: android.support.v4.app.FragmentManager, tag: String) {
         super.show(m, tag)
         val data = tag.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        this.lat= data[0].toDouble()
+        this.lat = data[0].toDouble()
         this.lng = data[1].toDouble()
     }
 
