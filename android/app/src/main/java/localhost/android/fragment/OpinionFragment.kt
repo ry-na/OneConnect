@@ -43,7 +43,7 @@ class OpinionFragment : DialogFragment() {
 
             it.findViewById(R.id.connect_button).setOnClickListener {
                 //TODO:返信ボタン押下
-               var reply= (it.findViewById(R.id.reply_box) as TextView).text;
+                var reply = (it.findViewById(R.id.reply_box) as TextView).text;
                 //返信送信後、更新
                 presenter.getReply(hashMapOf("id" to id.toString())) { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) }
             }

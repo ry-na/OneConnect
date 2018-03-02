@@ -21,13 +21,13 @@ class OpinionController extends V1Controller
      */
     public function get_reply(Request $request)
     {
-                        $validator = Validator::make(
+        $validator = Validator::make(
             $request->all(),
             [
                 Reply::OPINION_ID => 'required'
             ]
         );
-                if ($validator->fails()) {
+        if ($validator->fails()) {
             return $this->json(
                 400,
                 [
@@ -42,7 +42,7 @@ class OpinionController extends V1Controller
         );
     }
 
-       /**
+    /**
      *
      * @return mixed
      */
@@ -61,7 +61,7 @@ class OpinionController extends V1Controller
      */
     public function reply(Request $request)
     {
-                $validator = Validator::make(
+        $validator = Validator::make(
             $request->all(),
             [
                 Reply::USER_ID => 'required',
@@ -69,7 +69,7 @@ class OpinionController extends V1Controller
                 Reply::REPLY_MESSAGE => 'required|max:1000'  // TODO: 文字数はUI見て最大数を決める
             ]
         );
-                if ($validator->fails()) {
+        if ($validator->fails()) {
             return $this->json(
                 400,
                 [
@@ -77,11 +77,11 @@ class OpinionController extends V1Controller
                 ]
             );
         }
-         $reply = new Reply();
+        $reply = new Reply();
         $reply{Reply::USER_ID} = $request[Reply::USER_ID];
-         $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
+        $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
         $reply{Reply::REPLY_MESSAGE} = $request[Reply::REPLY_MESSAGE];
-               if (!$reply->save()) {
+        if (!$reply->save()) {
             return $this->json(
                 400,
                 [
@@ -89,17 +89,17 @@ class OpinionController extends V1Controller
                 ]
             );
         }
-                return $this->json(
+        return $this->json(
             200,
             [
                 Reply::CREATED_AT => $reply->{Reply::CREATED_AT}
             ]
         );
-      /*  return $this->json(
-            200,
-            Reply::where(Reply::OPINION_ID, $request->{Reply::OPINION_ID})
-                ->get(Reply::$gettableColumns)
-        );*/
+        /*  return $this->json(
+              200,
+              Reply::where(Reply::OPINION_ID, $request->{Reply::OPINION_ID})
+                  ->get(Reply::$gettableColumns)
+          );*/
     }
 
     /**

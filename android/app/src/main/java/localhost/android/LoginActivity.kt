@@ -56,10 +56,10 @@ class LoginActivity : AppCompatActivity() {
                     val x = login_logo.left
                     val left = login_logo.left.toFloat()
                     val top = login_logo.top.toFloat()
-                    val animation_translate = TranslateAnimation(0.0f, 0.0f, 0.0f,-top+(login_logo.measuredHeight/2))
+                    val animation_translate = TranslateAnimation(0.0f, 0.0f, 0.0f, -top + (login_logo.measuredHeight / 2))
                     animation_translate.duration = 500L
                     val animation_set = AnimationSet(false)
-                    animation_set.interpolator= AccelerateDecelerateInterpolator()
+                    animation_set.interpolator = AccelerateDecelerateInterpolator()
                     animation_set.addAnimation(animation_translate)
                     animation_set.fillAfter = true
                     animation_set.isFillEnabled = true
