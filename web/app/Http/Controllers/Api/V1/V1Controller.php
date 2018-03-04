@@ -13,6 +13,7 @@ class V1Controller extends Controller
     const PREFIX = 'v1';
 
     const ERROR = 'error';
+    const ERROR_DEBUG = 'error_debug';
 
     /**
      * Function to create json response

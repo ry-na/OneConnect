@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\User;
+use App\Models\Session;
 use Auth;
 use Illuminate\Http\Request;
 use Validator;
@@ -82,7 +83,7 @@ class UserController extends V1Controller
         return $this->json(
             200,
             [[
-                User::SESSION_ID => $loginUser->registerSId(),
+                Session::SESSION_ID => Session::register($loginUser,$request->ip())
             ]]
         );
     }

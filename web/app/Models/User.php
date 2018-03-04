@@ -18,11 +18,6 @@ class User extends BaseModel
      */
     const PASS = 'pass';
     /**
-     * SESSION_ID
-     */
-    const SESSION_ID = 'sid';
-
-    /**
      * @see https://readouble.com/laravel/5.3/ja/eloquent.html
      */
     protected $fillable = [
@@ -41,14 +36,4 @@ class User extends BaseModel
         ])->save();
     }
 
-    /**
-     * @return string
-     */
-    public function registerSId()
-    {
-        $token = sha1(uniqid(rand(), true));
-        $this->{User::SESSION_ID} = $token;
-        $this->save();
-        return $token;
-    }
 }

@@ -5,7 +5,6 @@
  */
 $factory->define(\App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        \App\Models\User::PASS => hash(config('app.hash'),'sample'),
-        \App\Models\User::SESSION_ID => null,
+        \App\Models\User::PASS => hash(config('app.hash'),'sample')
     ];
 });

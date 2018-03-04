@@ -22,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->string(\App\Models\User::EMAIL)->unique();
             $table->string(\App\Models\User::PASS);
-            $table->string(\App\Models\User::SESSION_ID)->nullable();
         });
     }
 
