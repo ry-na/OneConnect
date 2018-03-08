@@ -41,7 +41,7 @@ class InfoFragment : DialogFragment() {
             it.findViewById(R.id.connect_button).setOnClickListener {
                 //TODO:コネクトボタン押下
                 // TODO: IDを取得できるようにする
-                presenter.getReply(hashMapOf("id" to id.toString())) { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) }
+                presenter.getReply(context,(hashMapOf("id" to id.toString())), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
             it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
             (it.findViewById(R.id.m_title) as TextView).text = title

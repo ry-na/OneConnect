@@ -87,7 +87,7 @@ if(marker.snippet.substring(0,1).equals("0")) {
             lng = 139.707746
         }
         places.add(p)
-        presenter.getOpinion { status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) }
+        presenter.getOpinion (this,{ status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) })
         mf = MapFragment.newInstance()
         mf.getMapAsync(this@MainActivity)
         //  if (map == null) map = MapFragment()

@@ -45,7 +45,7 @@ class OpinionFragment : DialogFragment() {
                 //TODO:返信ボタン押下
                 var reply = (it.findViewById(R.id.reply_box) as TextView).text;
                 //返信送信後、更新
-                presenter.getReply(hashMapOf("id" to id.toString())) { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) }
+                presenter.getReply(context,hashMapOf("id" to id.toString()), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
             it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
             (it.findViewById(R.id.m_title) as TextView).text = title
@@ -58,7 +58,7 @@ class OpinionFragment : DialogFragment() {
         val data = tag.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         this.title = data[0]
         this.detail = data[1]
-        presenter.getReply(hashMapOf("id" to id.toString())) { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) }//返信データ取得・表示
+        presenter.getReply(context,hashMapOf("id" to id.toString()),{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
 
     }
 
