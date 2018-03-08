@@ -87,8 +87,7 @@ class OpinionController extends V1Controller
          return $this->json(
                 400,
                 [
-                    static::ERROR => Session::ErrorCode_Public($auth_result),
-                    static::ERROR_DEBUG => $auth_result
+                    static::ERROR => $auth_result
                 ]
             );
     }
