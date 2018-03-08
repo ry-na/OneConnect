@@ -48,52 +48,8 @@ class LoginActivity : AppCompatActivity() {
         val mEmailSignInButton = findViewById(R.id.email_sign_in_button) as Button
         mEmailSignInButton.setOnClickListener { attemptLogin() }
 
-        login_form.visibility = View.INVISIBLE
-        Thread(Runnable {
-            if (!presenter.init_Login()) {
-                handler.post {
 
-                    val x = login_logo.left
-                    val left = login_logo.left.toFloat()
-                    val top = login_logo.top.toFloat()
-                    val animation_translate = TranslateAnimation(0.0f, 0.0f, 0.0f, -top + (login_logo.measuredHeight / 2))
-                    animation_translate.duration = 500L
-                    val animation_set = AnimationSet(false)
-                    animation_set.interpolator = AccelerateDecelerateInterpolator()
-                    animation_set.addAnimation(animation_translate)
-                    animation_set.fillAfter = true
-                    animation_set.isFillEnabled = true
-                    animation_set.setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationStart(arg0: Animation) {}
-
-                        override fun onAnimationRepeat(arg0: Animation) {}
-
-                        override fun onAnimationEnd(arg0: Animation) {
-                            login_form.visibility = View.VISIBLE //ログイン画面常時
-                        }
-                    })
-                    title_text.startAnimation(animation_set)
-                    login_logo.startAnimation(animation_set)
-                }
-            }
-        }).start()
     }
-
-    /**
-     * Dp->Px
-
-     * @param dp
-     * *
-     * @param context
-     * *
-     * @return
-     */
-    private fun convertDp2Px(dp: Float, context: Context): Float {
-        val metrics = context.resources.displayMetrics
-        return dp * metrics.density
-    }
-
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the

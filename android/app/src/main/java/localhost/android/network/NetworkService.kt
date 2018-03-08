@@ -1,10 +1,16 @@
 package localhost.android.network
 
+import android.content.Context
 import localhost.android.config.Network
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import android.net.NetworkInfo
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
+
+
 
 /**
  * Httpリクエストに関する機能を提供するクラス
@@ -24,4 +30,6 @@ class NetworkService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }
+
+
 }

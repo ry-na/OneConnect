@@ -111,7 +111,7 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         if (status) {
             //ログイン成功
             val editor = sharedPreferences.edit()
-            val SID = ""  //←SIDを代入する
+            val SID = ""
             val SID_ = mKeyStoreManager.encrypt(SID.toByteArray())
             editor.apply {
                 putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
@@ -128,25 +128,6 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         //return null
     }
 
-    /**
-     * ログインできたか確認する
 
-     * @return ログイン処理完了
-     */
-    fun init_Login(): Boolean {
-        try {
-            val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-            val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
-            if (SID == "") {
-                Thread.sleep(2000L)
-                return false
-            }
-            //TODO:SIDを基にチェック処理 必要に応じてSIDを更新
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-
-        return false
-    }
 }
 
