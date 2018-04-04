@@ -18,7 +18,7 @@ php artisan serve --host=0.0.0.0 --port=80 か php -S 0.0.0.0:80 -t public
 - コマンド実行(Unix系)
 >cd web  
 composer update  
-cp .env.example .env  
+cp env.example .env  
 touch database/local.sqlite  
 php artisan key:generate  
 php artisan migrate:refresh --seed  
