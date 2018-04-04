@@ -1,10 +1,14 @@
 <?php
+
 namespace App\Models;
+
 use App\Models\User;
+
 /**
  * @author Takahiro Otani <taka.oot@gmail.com>
  */
-class Session extends BaseModel {
+class Session extends BaseModel
+{
     const TABLE = 'sessions';
     /**
      * OPINION_ID
@@ -26,32 +30,50 @@ class Session extends BaseModel {
      * @see https://readouble.com/laravel/5.3/ja/eloquent.html
      */
     protected $guarded = [self::ID];
+
+    /**
+     * NOT_FOUND
+     */
+    const NOT_FOUND = "not_found";
+
+    /**
+     * OK
+     */
+    const OK = "ok";
     /**
      * Column to be obtained by Select statement.
      * @var array
      */
     public static $gettableColumns = [self::SESSION_ID, self::USER_ID, self::IP];
-    public static function ErrorCode_Public($error) {
+
+    public static function ErrorCode_Public($error)
+    {
         return ($error >> 4) << 4;
     }
-    public static function SID2ID($request) {
+
+    public static function SID2ID($request)
+    {
         $sid = $request->header(static ::SESSION_ID);
         $col = Session::where(static ::SESSION_ID, $sid)->get()->first();
         if (!$col) return "";
         return $col->{Session::USER_ID};
     }
-    public static function Auth($request) {
+
+    public static function Auth($request)
+    {
         $sid = $request->header(static ::SESSION_ID);
         $col = Session::where(static ::SESSION_ID, $sid)->get()->first();
-        if (!$col) return static "not_found";
+        if (!$col) return static::NOT_FOUND;
         //CHECK1:TIME
         $time = $col->{Session::CREATED_AT}->timestamp;
         if (time() - $time > static ::TIMEOUT) "timeout";
-        return static "ok";
+        return static::OK;
     }
-    public static function register($user, $ip) {
+
+    public static function register($user, $ip)
+    {
         $sid = bin2hex(random_bytes(32)); //256bit
-        static ::create([static ::SESSION_ID => $sid, static ::USER_ID => $user->{User::EMAIL}, static ::IP => $ip])->save();
+        static::create([static ::SESSION_ID => $sid, static ::USER_ID => $user->{User::EMAIL}, static ::IP => $ip])->save();
         return $sid;
     }
 }
