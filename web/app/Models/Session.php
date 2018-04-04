@@ -46,7 +46,7 @@ class Session extends BaseModel
      */
     public static $gettableColumns = [self::SESSION_ID, self::USER_ID, self::IP];
 
-    public static function ErrorCode_Public($error)
+    public static function errorCodePublic($error)
     {
         return ($error >> 4) << 4;
     }
@@ -55,25 +55,35 @@ class Session extends BaseModel
     {
         $sid = $request->header(static ::SESSION_ID);
         $col = Session::where(static ::SESSION_ID, $sid)->get()->first();
-        if (!$col) return "";
+        if (!$col) {
+            return "";
+        }
         return $col->{Session::USER_ID};
     }
 
-    public static function Auth($request)
+    public static function auth($request)
     {
         $sid = $request->header(static ::SESSION_ID);
         $col = Session::where(static ::SESSION_ID, $sid)->get()->first();
-        if (!$col) return static::NOT_FOUND;
+        if (!$col) {
+            return static::NOT_FOUND;
+        }
         //CHECK1:TIME
         $time = $col->{Session::CREATED_AT}->timestamp;
-        if (time() - $time > static ::TIMEOUT) "timeout";
+        if (time() - $time > static ::TIMEOUT) {
+            return "timeout";
+        }
         return static::OK;
     }
 
     public static function register($user, $ip)
     {
         $sid = bin2hex(random_bytes(32)); //256bit
-        static::create([static ::SESSION_ID => $sid, static ::USER_ID => $user->{User::EMAIL}, static ::IP => $ip])->save();
+        static::create([
+            static::SESSION_ID => $sid,
+            static::USER_ID => $user->{User::EMAIL},
+            static::IP => $ip
+        ])->save();
         return $sid;
     }
 }
