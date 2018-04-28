@@ -2,7 +2,7 @@
 
 ## インストール
 #### Windows  
-https://gitforwindows.org/  
+https://gitforwindows.org/  
 https://tortoisegit.org/  
 
 
