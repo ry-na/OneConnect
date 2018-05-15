@@ -1,9 +1,13 @@
 # OneConnect
 
 ## インストール
-URLがWindows前提のため注意  
-https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/Git-2.13.0-64-bit.exe  
-https://download.tortoisegit.org/tgit/2.4.0.0/TortoiseGit-2.4.0.2-64bit.msi
+#### Windows  
+https://gitforwindows.org/  
+https://tortoisegit.org/  
+
+
+#### MacOS
+>brew install git  
 
 ## クローン
 >git clone https://github.com/waricoma/OneConnect.git  
