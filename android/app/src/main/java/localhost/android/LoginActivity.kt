@@ -15,9 +15,6 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
 import localhost.android.Presenter.LoginActivityPresenter
 import java.util.*
-import android.support.v4.view.ViewCompat.setTranslationY
-import android.animation.ValueAnimator
-import android.support.v4.view.ViewCompat.setTranslationY
 import android.view.animation.*
 
 
@@ -50,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
 
         login_form.visibility = View.INVISIBLE
         Thread(Runnable {
-            if (!presenter.init_Login()) {
+            if (!presenter.initLogin()) {
                 handler.post {
 
                     val x = login_logo.left

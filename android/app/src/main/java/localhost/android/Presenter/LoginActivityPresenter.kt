@@ -133,10 +133,11 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
 
      * @return ログイン処理完了
      */
-    fun init_Login(): Boolean {
+    fun initLogin(): Boolean {
         try {
-            val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-            val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
+            val decodedSID = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
+            // https://github.com/ry-na/OneConnect/issues/28
+            val SID: String = ""//if (decodedSID.isNotEmpty()) String(mKeyStoreManager.decrypt(decodedSID)) else "" //Session ID
             if (SID == "") {
                 Thread.sleep(2000L)
                 return false
