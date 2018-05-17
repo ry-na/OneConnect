@@ -19,19 +19,10 @@ class OpinionController extends V1Controller
     /**
      *
      * @return mixed
+     *
      */
-    public function get(Request $request)
+    public function get()
     {
-        $auth_result = Session::Auth($request);
-        if ($auth_result != Session::AUTH_SUCCESS) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => Session::ErrorCode_Public($auth_result),
-                    static::ERROR_DEBUG => $auth_result
-                ]
-            );
-        }
         return $this->json(
             200,
             Opinion::get(Opinion::$gettableColumns)
@@ -40,20 +31,11 @@ class OpinionController extends V1Controller
 
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function getReply(Request $request)
     {
-        $auth_result = Session::Auth($request);
-        if ($auth_result != Session::AUTH_SUCCESS) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => Session::ErrorCode_Public($auth_result),
-                    static::ERROR_DEBUG => $auth_result
-                ]
-            );
-        }
         $validator = Validator::make(
             $request->all(),
             [
@@ -77,20 +59,13 @@ class OpinionController extends V1Controller
 
     /**
      * @see http://qiita.com/qwe001/items/de4cf622cc22e49b9ada
+     *
      * @param Request $request
+     *
      * @return mixed
      */
     public function register(Request $request)
     {
-        $auth_result = Session::Auth($request);
-        if ($auth_result != Session::AUTH_SUCCESS) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => $auth_result
-                ]
-            );
-        }
         $validator = Validator::make(
             $request->all(),
             [
@@ -129,6 +104,7 @@ class OpinionController extends V1Controller
                 ]
             );
         }
+
         return $this->json(
             200,
             [
@@ -141,20 +117,11 @@ class OpinionController extends V1Controller
     /**
      *
      * @param Request $request
+     *
      * @return mixed
      */
     public function reply(Request $request)
     {
-        $auth_result = Session::Auth($request);
-        if ($auth_result != Session::AUTH_SUCCESS) {
-            return $this->json(
-                400,
-                [
-                    static::ERROR => Session::ErrorCode_Public($auth_result),
-                    static::ERROR_DEBUG => $auth_result
-                ]
-            );
-        }
         $validator = Validator::make(
             $request->all(),
             [
@@ -183,6 +150,7 @@ class OpinionController extends V1Controller
                 ]
             );
         }
+
         return $this->json(
             200,
             [
