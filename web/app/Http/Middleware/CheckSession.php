@@ -4,9 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Session;
+use Response;
 
 class CheckSession
 {
+
+    const SESSION_ERROR = 'session_error';
+
     /**
      * Handle an incoming request.
      *
@@ -17,12 +21,12 @@ class CheckSession
     public function handle($request, Closure $next)
     {
         $authResult = Session::Auth($request);
-        if ($authResult != Session::AUTH_SUCCESS) {
-            return $this->json(
-                400,
+        if ($authResult != Session::OK) {
+            return Response::json(
                 [
-                    static::ERROR => $authResult
-                ]
+                    static::SESSION_ERROR => $authResult
+                ],
+                400
             );
         }
         return $next($request);
