@@ -15,20 +15,20 @@ interface NetworkInterface {
     @Headers("Content-type: application/json")
     @POST(Network.USER_API_URL + Network.LOGIN)
     fun login(
-            @Header("Session-ID") sId: String = "",
+            @Header("sid") sId: String = "",
             @Body body: HashMap<String, String>?
     ): Observable<List<LoginResponseData>>
 
     @Headers("Content-type: application/json")
     @GET(Network.OPINION_API_URL + Network.GET)
     public fun opinion(
-            @Header("Session-ID") sId: String = ""
+            @Header("sid") sId: String = ""
     ): Observable<List<OpinionResponseData>>
 
     @Headers("Content-type: application/json")
     @POST(Network.OPINION_API_URL + Network.REPLY)
     fun reply(
-            @Header("Session-ID") sId: String = "",
+            @Header("sid") sId: String = "",
             @Body body: HashMap<String, String>?
     ): Observable<List<ReplyResponseData>>
 }

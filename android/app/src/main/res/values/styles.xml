@@ -15,5 +15,14 @@
         <item name="colorControlActivated">#000</item>
         <item name="colorControlHighlight">#000</item>
     </style>
+    <style name="AppTheme_splash" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="colorControlNormal">#000</item>
+        <item name="colorControlActivated">#000</item>
+        <item name="colorControlHighlight">#000</item>
+    </style>
 
 </resources>

@@ -79,18 +79,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Dp->Px
 
-     * @param dp
-     * *
-     * @param context
-     * *
-     * @return
-     */
-    private fun convertDp2Px(dp: Float, context: Context): Float {
-        val metrics = context.resources.displayMetrics
-        return dp * metrics.density
     }
-
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the

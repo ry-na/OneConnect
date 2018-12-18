@@ -111,7 +111,7 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         if (status) {
             //ログイン成功
             val editor = sharedPreferences.edit()
-            val SID = ""  //←SIDを代入する
+            val SID = ""
             val SID_ = mKeyStoreManager.encrypt(SID.toByteArray())
             editor.apply {
                 putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
@@ -127,6 +127,7 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         }
         //return null
     }
+
 
     /**
      * ログインできたか確認する
@@ -147,7 +148,6 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
             e.printStackTrace()
         }
 
-        return false
-    }
+      
 }
 
