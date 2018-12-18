@@ -15,9 +15,6 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
 import localhost.android.Presenter.LoginActivityPresenter
 import java.util.*
-import android.support.v4.view.ViewCompat.setTranslationY
-import android.animation.ValueAnimator
-import android.support.v4.view.ViewCompat.setTranslationY
 import android.view.animation.*
 
 
@@ -48,6 +45,39 @@ class LoginActivity : AppCompatActivity() {
         val mEmailSignInButton = findViewById(R.id.email_sign_in_button) as Button
         mEmailSignInButton.setOnClickListener { attemptLogin() }
 
+        login_form.visibility = View.INVISIBLE
+        Thread(Runnable {
+            if (!presenter.initLogin()) {
+                handler.post {
+
+                    val x = login_logo.left
+                    val left = login_logo.left.toFloat()
+                    val top = login_logo.top.toFloat()
+                    val animation_translate = TranslateAnimation(0.0f, 0.0f, 0.0f, -top + (login_logo.measuredHeight / 2))
+                    animation_translate.duration = 500L
+                    val animation_set = AnimationSet(false)
+                    animation_set.interpolator = AccelerateDecelerateInterpolator()
+                    animation_set.addAnimation(animation_translate)
+                    animation_set.fillAfter = true
+                    animation_set.isFillEnabled = true
+                    animation_set.setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationStart(arg0: Animation) {}
+
+                        override fun onAnimationRepeat(arg0: Animation) {}
+
+                        override fun onAnimationEnd(arg0: Animation) {
+                            login_form.visibility = View.VISIBLE //ログイン画面常時
+                        }
+                    })
+                    title_text.startAnimation(animation_set)
+                    login_logo.startAnimation(animation_set)
+                }
+            }
+        }).start()
+    }
+
+    /**
+     * Dp->Px
 
     }
     /**

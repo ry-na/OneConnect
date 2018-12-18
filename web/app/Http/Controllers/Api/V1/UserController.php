@@ -18,7 +18,9 @@ class UserController extends V1Controller
 
     /**
      * Function to register user information
+     *
      * @param Request $request
+     *
      * @return mixed
      */
     public function register(Request $request)
@@ -39,12 +41,15 @@ class UserController extends V1Controller
             );
         }
         User::register($request->all());
+
         return $this->json();
     }
 
     /**
      * Class for login processing
+     *
      * @param Request $request
+     *
      * @return mixed
      */
     public function login(Request $request)
@@ -80,11 +85,14 @@ class UserController extends V1Controller
             );
         }
         Auth::login($loginUser);
+
         return $this->json(
             200,
-            [[
-                Session::SESSION_ID => Session::register($loginUser,$request->ip())
-            ]]
+            [
+                [
+                    Session::SESSION_ID => Session::register($loginUser, $request->ip())
+                ]
+            ]
         );
     }
 }

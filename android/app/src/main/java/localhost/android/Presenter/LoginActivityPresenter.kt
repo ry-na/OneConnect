@@ -129,5 +129,25 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
     }
 
 
+    /**
+     * ログインできたか確認する
+
+     * @return ログイン処理完了
+     */
+    fun initLogin(): Boolean {
+        try {
+            val decodedSID = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
+            // https://github.com/ry-na/OneConnect/issues/28
+            val SID: String = ""//if (decodedSID.isNotEmpty()) String(mKeyStoreManager.decrypt(decodedSID)) else "" //Session ID
+            if (SID == "") {
+                Thread.sleep(2000L)
+                return false
+            }
+            //TODO:SIDを基にチェック処理 必要に応じてSIDを更新
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+      
 }
 
