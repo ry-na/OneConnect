@@ -23,7 +23,7 @@ class RepliesTableSeeder extends Seeder
             ],
             [
                 \App\Models\Reply::USER_ID => 1,
-                \App\Models\Reply::OPINION_ID => 1
+                \App\Models\Reply::OPINION_ID => 1,
                 \App\Models\Reply::REPLY_MESSAGE => "返信02メッセージ"
             ],
             [
