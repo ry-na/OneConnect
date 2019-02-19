@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers
 import java.util.*
 
 class InfoFragmentPresenter {
-    fun getReply(context : Context, body: HashMap<String, String>?,
+    fun getReply(context : Context,id : String,
                  callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
         val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -23,7 +23,7 @@ class InfoFragmentPresenter {
         val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
         val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         retrofit.create(NetworkInterface::class.java)
-                .reply(SID, body)    // TODO: 第1引数で if(sId == null) "" else sId こんな関数を呼ぶ
+                .get_reply(SID, id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<List<ReplyResponseData?>>() {

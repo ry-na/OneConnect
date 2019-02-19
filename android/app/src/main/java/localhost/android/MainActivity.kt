@@ -29,7 +29,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val places: ArrayList<Place> = ArrayList()
     private val presenter = MainActivityPresenter()
-
+    val idlist = mutableListOf<Int>()
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -45,24 +45,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         .position(ll)
                         .title(p.title)
                         .snippet(p.type.toString() + p.detail)
-                        .icon(BitmapDescriptorFactory.defaultMarker(if(p.type==0)BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_BLUE)) //TODO: 仮に色分け
+                        .icon(BitmapDescriptorFactory.defaultMarker(if (p.type == 0) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_BLUE)) //TODO: 仮に色分け
                 )
+                idlist.add(p.id)
             }
             // TODO: IDをFragment側で取得できるようにする
-           setOnMapLongClickListener { latlng ->
-               var newFragment = Opinion_new()
-               newFragment.show(supportFragmentManager, latlng.latitude.toString()+","+latlng.longitude.toString()+"," + latlng.)
-           }
+            setOnMapLongClickListener { latlng ->
+                var newFragment = Opinion_new()
+                newFragment.show(supportFragmentManager, latlng.latitude.toString() + "," + latlng.longitude.toString() )
+            }
             setOnMarkerClickListener { marker ->
-                val detail = marker.snippet.substring(1,marker.snippet.lastIndex)
+                val detail = marker.snippet.substring(1, marker.snippet.lastIndex)
 
-if(marker.snippet.substring(0,1).equals("0")) {
-   var newFragment = InfoFragment()
-    newFragment.show(supportFragmentManager, marker.title + "," + detail)
-}else   if(marker.snippet.substring(0,1).equals("1")) {
-    var newFragment = OpinionFragment()
-    newFragment.show(supportFragmentManager, marker.title + "," + detail)
-}
+                if (marker.snippet.substring(0, 1).equals("0")) {
+                    var newFragment = InfoFragment()
+                    newFragment.show(supportFragmentManager, marker.title + "," + detail)
+                } else if (marker.snippet.substring(0, 1).equals("1")) { //意見
+                    var newFragment = OpinionFragment()
+                    newFragment.show(supportFragmentManager, marker.title + "," + detail + "," + idlist.get(0))
+                }
                 false
             }
         }
@@ -80,14 +81,14 @@ if(marker.snippet.substring(0,1).equals("0")) {
         val p = Place()
         p.run {
             id = 0
-            type= 0
+            type = 0
             title = "テスト"
             detail = "ああああ"
             lat = 35.774337
             lng = 139.707746
         }
         places.add(p)
-        presenter.getOpinion (this,{ status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) })
+        presenter.getOpinion(this, { status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) })
         mf = MapFragment.newInstance()
         mf.getMapAsync(this@MainActivity)
         //  if (map == null) map = MapFragment()
@@ -115,7 +116,7 @@ if(marker.snippet.substring(0,1).equals("0")) {
                             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             ft.addToBackStack(null)
 
-                          ft.commit()
+                            ft.commit()
                         }
                         if (position == 3) {
                             /*   val ft = fragmentManager.beginTransaction()
@@ -142,7 +143,7 @@ if(marker.snippet.substring(0,1).equals("0")) {
 
                 p.run {
                     id = data.id.toInt()
-                    type=1
+                    type = 1
                     title = data.opinion_message
                     detail = data.opinion_message
                     lat = data.lat.toDouble()

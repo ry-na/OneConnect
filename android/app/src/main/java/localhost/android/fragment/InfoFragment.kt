@@ -42,7 +42,7 @@ class InfoFragment : DialogFragment() {
             it.connect_button.setOnClickListener {
                 //TODO:コネクトボタン押下
                 // TODO: IDを取得できるようにする
-                presenter.getReply(context,(hashMapOf("id" to id.toString())), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
+          //      presenter.getReply(context,(hashMapOf("id" to id.toString())), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
             it.close_button.setOnClickListener { dismiss() }
             (it.m_title as TextView).text = title

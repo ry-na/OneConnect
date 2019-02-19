@@ -14,6 +14,7 @@ class Network {
         const val REGISTER = "register"
         const val LOGIN = "login"
         const val GET = "get"
+        const val GET_REPLY = "getReply"
         const val REPLY = "reply"
     }
 }

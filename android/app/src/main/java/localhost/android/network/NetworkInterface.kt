@@ -26,6 +26,13 @@ interface NetworkInterface {
     ): Observable<List<OpinionResponseData>>
 
     @Headers("Content-type: application/json")
+    @GET(Network.OPINION_API_URL + Network.GET_REPLY)
+    fun get_reply(
+            @Header("sid") sId: String = "",
+            @Header("opinion_id") oId: String
+    ): Observable<List<ReplyResponseData>>
+
+    @Headers("Content-type: application/json")
     @POST(Network.OPINION_API_URL + Network.REPLY)
     fun reply(
             @Header("sid") sId: String = "",
