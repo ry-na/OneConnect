@@ -90,8 +90,10 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                         e!!.printStackTrace()
                         if (e is HttpException) {
                             val a = object : Annotation {}
-                            loginResult(false, retrofit.responseBodyConverter<List<LoginResponseData?>>(LoginResponseData::class.java, arrayOf(a))
-                                    .convert(e.response().errorBody()))
+                            var b =arrayOf(a)
+                        //    loginResult(false, retrofit.responseBodyConverter<List<LoginResponseData?>>(LoginResponseData::class.java, arrayOf(a))
+                          //          .convert(e.response().errorBody()))
+                            loginResult(false, null) //TODO: 修正
                         } else loginResult(false, listOf(LoginResponseData()))
                     }
 
@@ -111,8 +113,8 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
         if (status) {
             //ログイン成功
             val editor = sharedPreferences.edit()
-            val SID = ""
-            val SID_ = mKeyStoreManager.encrypt(SID.toByteArray())
+            val SID = response?.get(0)?.sid
+            val SID_ = mKeyStoreManager.encrypt(SID?.toByteArray())
             editor.apply {
                 putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
                 commit()

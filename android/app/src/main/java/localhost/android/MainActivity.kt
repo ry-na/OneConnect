@@ -114,7 +114,8 @@ if(marker.snippet.substring(0,1).equals("0")) {
                             ft.replace(R.id.fragment_container, mf)
                             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             ft.addToBackStack(null)
-                            ft.commit()
+
+                          ft.commit()
                         }
                         if (position == 3) {
                             /*   val ft = fragmentManager.beginTransaction()

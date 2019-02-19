@@ -21,9 +21,10 @@ class MainActivityPresenter {
     fun getOpinion(context: Context, callback: (status: Boolean, response: List<OpinionResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
     val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+       // val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
         val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
-        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
+        val SID_ = Base64.decode(sharedPreferences.getString("SID", "AAAAAAAA"), Base64.DEFAULT)
+        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "AAAAAA" //Session ID
         retrofit.create(NetworkInterface::class.java)
                 .opinion(SID)    // TODO: 第二引数で if(sId == null) "" else sId こんな関数を呼ぶ
                 .subscribeOn(Schedulers.io())
@@ -47,7 +48,6 @@ class MainActivityPresenter {
                                     .convert(e.response().errorBody()))
                         } else callback(false, listOf(OpinionResponseData()))
                     }
-
                     /**
                      * 成功
                      */
