@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_info.*
 import localhost.android.Presenter.InfoFragmentPresenter
 import localhost.android.R
 import localhost.android.model.ReplyResponseData
@@ -38,14 +39,14 @@ class InfoFragment : DialogFragment() {
             it.setContentView(R.layout.fragment_info)
             // 背景を透明にする
             it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            it.findViewById(R.id.connect_button).setOnClickListener {
+            it.connect_button.setOnClickListener {
                 //TODO:コネクトボタン押下
                 // TODO: IDを取得できるようにする
                 presenter.getReply(context,(hashMapOf("id" to id.toString())), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
-            it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
-            (it.findViewById(R.id.m_title) as TextView).text = title
-            (it.findViewById(R.id.m_detail) as TextView).text = detail
+            it.close_button.setOnClickListener { dismiss() }
+            (it.m_title as TextView).text = title
+            (it.m_detail as TextView).text = detail
             return it
         }
     }
@@ -72,7 +73,7 @@ class InfoFragment : DialogFragment() {
                 R.layout.list_replies,
                 responseList
         )
-        val myListView = dialog.findViewById(R.id.replies_list)
+        val myListView = dialog.replies_list
         if (myListView is ListView) {
             myListView.adapter = arrayAdapter
         }

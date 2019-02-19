@@ -143,11 +143,15 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                 Thread.sleep(2000L)
                 return false
             }
+            return true
             //TODO:SIDを基にチェック処理 必要に応じてSIDを更新
         } catch (e: InterruptedException) {
             e.printStackTrace()
+            return false
         }
 
-      
+
+
+    }
 }
 

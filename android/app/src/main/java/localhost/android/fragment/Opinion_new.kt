@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_opinion.*
 import localhost.android.Presenter.InfoFragmentPresenter
 
 import localhost.android.R
@@ -38,11 +39,11 @@ class Opinion_new : DialogFragment() {
             // 背景を透明にする
             it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            it.findViewById(R.id.connect_button).setOnClickListener {
+            it.connect_button.setOnClickListener {
                 //TODO:発信ボタン押下
 
             }
-            it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
+            it.close_button.setOnClickListener { dismiss() }
             (it.findViewById(R.id.m_title) as TextView).text = "場所：" + lat + "," + lng
             return it
         }

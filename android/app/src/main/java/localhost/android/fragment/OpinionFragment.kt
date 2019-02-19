@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_opinion.*
 import localhost.android.Presenter.InfoFragmentPresenter
 
 import localhost.android.R
@@ -41,13 +42,13 @@ class OpinionFragment : DialogFragment() {
             // 背景を透明にする
             it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            it.findViewById(R.id.connect_button).setOnClickListener {
+            it.connect_button.setOnClickListener {
                 //TODO:返信ボタン押下
                 var reply = (it.findViewById(R.id.reply_box) as TextView).text;
                 //返信送信後、更新
                 presenter.getReply(context,hashMapOf("id" to id.toString()), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
-            it.findViewById(R.id.close_button).setOnClickListener { dismiss() }
+            it.close_button.setOnClickListener { dismiss() }
             (it.findViewById(R.id.m_title) as TextView).text = title
             return it
         }
@@ -77,7 +78,7 @@ class OpinionFragment : DialogFragment() {
                 R.layout.list_replies,
                 responseList
         )
-        val myListView = dialog.findViewById(R.id.replies_list)
+        val myListView = dialog.replies_list
         if (myListView is ListView) {
             myListView.adapter = arrayAdapter
         }
