@@ -51,7 +51,7 @@ class Session extends BaseModel
         return ($error >> 4) << 4;
     }
 
-    public static function SID2ID($request)
+    public static function sessionIdToUserId($request)
     {
         $sid = $request->header(static ::SESSION_ID);
         $col = Session::where(static ::SESSION_ID, $sid)->get()->first();

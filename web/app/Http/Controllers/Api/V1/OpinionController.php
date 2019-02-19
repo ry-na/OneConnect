@@ -92,7 +92,7 @@ class OpinionController extends V1Controller
         }
 
         $opinion = new Opinion();
-        $opinion{Opinion::USER_ID} = Session::SID2ID($request);
+        $opinion{Opinion::USER_ID} = Session::sessionIdToUserId($request);
         $opinion{Opinion::OPINION_MESSAGE} = $request[Opinion::OPINION_MESSAGE];
         $opinion{Opinion::LAT} = $request[Opinion::LAT];
         $opinion{Opinion::LON} = $request[Opinion::LON];
@@ -125,7 +125,6 @@ class OpinionController extends V1Controller
         $validator = Validator::make(
             $request->all(),
             [
-                Reply::USER_ID => 'required',
                 Reply::OPINION_ID => 'required',
                 Reply::REPLY_MESSAGE => 'required|max:1000'  // TODO: 文字数はUI見て最大数を決める
             ]
@@ -139,7 +138,7 @@ class OpinionController extends V1Controller
             );
         }
         $reply = new Reply();
-        $reply{Reply::USER_ID} = $request[Reply::USER_ID];
+        $reply{Reply::USER_ID} = Session::sessionIdToUserId($request);
         $reply{Reply::OPINION_ID} = $request[Reply::OPINION_ID];
         $reply{Reply::REPLY_MESSAGE} = $request[Reply::REPLY_MESSAGE];
         if (!$reply->save()) {
