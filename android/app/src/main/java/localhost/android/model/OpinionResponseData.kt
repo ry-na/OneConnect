@@ -13,5 +13,6 @@ data class OpinionResponseData(
         val lat: String = "",
         val lon: String = "",
         val opinion_message: String = "",
-        val user_id: String = ""
+        val user_id: String = "",
+        val error: String =""
 ) : Serializable

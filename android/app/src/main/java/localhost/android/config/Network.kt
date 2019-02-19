@@ -6,7 +6,7 @@ package localhost.android.config
  */
 class Network {
     companion object {
-        const val BASE_URL = "http://192.168.1.204/ "
+        const val BASE_URL = "http://192.168.137.25/ "
 
         const val USER_API_URL = "api/v1/user/"
         const val OPINION_API_URL = "api/v1/opinion/"

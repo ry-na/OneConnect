@@ -46,7 +46,8 @@ class OpinionFragment : DialogFragment() {
                 //TODO:返信ボタン押下
                 var reply = (it.findViewById(R.id.reply_box) as TextView).text;
                 //返信送信後、更新
-                presenter.getReply(context,hashMapOf("id" to id.toString()), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
+
+               presenter.getReply(activity.applicationContext,hashMapOf("id" to id.toString()), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
             }
             it.close_button.setOnClickListener { dismiss() }
             (it.findViewById(R.id.m_title) as TextView).text = title
@@ -54,13 +55,15 @@ class OpinionFragment : DialogFragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        presenter.getReply(context,hashMapOf("id" to id.toString()),{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
+        super.onAttach(context)
+    }
     override fun show(m: android.support.v4.app.FragmentManager, tag: String) {
         super.show(m, tag)
         val data = tag.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         this.title = data[0]
         this.detail = data[1]
-        presenter.getReply(context,hashMapOf("id" to id.toString()),{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
-
     }
 
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {

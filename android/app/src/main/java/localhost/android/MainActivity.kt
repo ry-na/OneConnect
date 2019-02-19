@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             // TODO: IDをFragment側で取得できるようにする
            setOnMapLongClickListener { latlng ->
                var newFragment = Opinion_new()
-               newFragment.show(supportFragmentManager, latlng.latitude.toString()+","+latlng.longitude.toString())
+               newFragment.show(supportFragmentManager, latlng.latitude.toString()+","+latlng.longitude.toString()+"," + latlng.)
            }
             setOnMarkerClickListener { marker ->
                 val detail = marker.snippet.substring(1,marker.snippet.lastIndex)

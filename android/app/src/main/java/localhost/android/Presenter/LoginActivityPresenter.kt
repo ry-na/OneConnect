@@ -91,9 +91,8 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                         if (e is HttpException) {
                             val a = object : Annotation {}
                             var b =arrayOf(a)
-                        //    loginResult(false, retrofit.responseBodyConverter<List<LoginResponseData?>>(LoginResponseData::class.java, arrayOf(a))
-                          //          .convert(e.response().errorBody()))
-                            loginResult(false, null) //TODO: 修正
+                           loginResult(false, retrofit.responseBodyConverter<List<LoginResponseData?>>(LoginResponseData::class.java, arrayOf(a)).convert(e.response().errorBody()))
+                        //    loginResult(false, null) //TODO: 修正
                         } else loginResult(false, listOf(LoginResponseData()))
                     }
 

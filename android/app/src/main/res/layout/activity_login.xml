@@ -47,6 +47,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:text="a@gmail.com"
                 android:textColor="@android:color/black" />
 
         </android.support.design.widget.TextInputLayout>
@@ -66,6 +67,7 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:text="adada"
                 android:textColor="@android:color/black" />
 
         </android.support.design.widget.TextInputLayout>

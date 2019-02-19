@@ -4,5 +4,5 @@ import java.io.Serializable
 
 data class LoginResponseData(
         val sid: String? = "",
-        val error: List<String>? = null
+        val error: String? = ""
 ) : Serializable
