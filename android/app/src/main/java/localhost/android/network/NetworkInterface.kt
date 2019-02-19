@@ -36,7 +36,6 @@ interface NetworkInterface {
     @POST(Network.OPINION_API_URL + Network.REPLY)
     fun reply(
             @Header("sid") sId: String = "",
-            @Header("opinion_id") oId: String = "",
             @Body body: HashMap<String, String>?
     ): Observable<List<ReplyResponseData>>
 }

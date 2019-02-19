@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
@@ -29,42 +28,46 @@ import localhost.android.model.ReplyResponseData
 class OpinionFragment : DialogFragment() {
     private var title = ""
     private var detail = ""
-    private var oid=""
+    private var oId = ""
     private val presenter = InfoFragmentPresenter()
-
+    lateinit var c: Context
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        Dialog(activity).let {
+        Dialog(activity).let { dialog_object ->
             // タイトル非表示
-            it.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog_object.window!!.requestFeature(Window.FEATURE_NO_TITLE)
             // フルスクリーン
-            it.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-            it.setContentView(R.layout.fragment_opinion)
+            dialog_object.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+            dialog_object.setContentView(R.layout.fragment_opinion)
             // 背景を透明にする
-            it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog_object.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            it.connect_button.setOnClickListener {
+            dialog_object.connect_button.setOnClickListener {
                 //TODO:返信ボタン押下
-                var reply = (it.findViewById(R.id.reply_box) as TextView).text;
+                val reply = dialog_object.reply_box2.text.toString()
+
+                presenter.sendReply(c, oId, reply, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
                 //返信送信後、更新
 
-               presenter.getReply(activity.applicationContext,oid,{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
+                presenter.getReply(c, oId, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
             }
-            it.close_button.setOnClickListener { dismiss() }
-            (it.findViewById(R.id.m_title) as TextView).text = title
-            return it
+            dialog_object.close_button.setOnClickListener { dismiss() }
+            (dialog_object.findViewById(R.id.m_title) as TextView).text = title
+            return dialog_object
         }
     }
 
     override fun onAttach(context: Context) {
-        presenter.getReply(context,oid,{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
+        c = context
+        presenter.getReply(context, oId, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
         super.onAttach(context)
     }
+
     override fun show(m: android.support.v4.app.FragmentManager, tag: String) {
         super.show(m, tag)
         val data = tag.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         this.title = data[0]
         this.detail = data[1]
-        this.oid=data[2]
+        this.oId = data[2]
     }
 
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
@@ -74,7 +77,7 @@ class OpinionFragment : DialogFragment() {
         response.forEach {
             if (it is ReplyResponseData) {
                 println(it.toString())
-                responseList.add("[" + it.user_id+"]"+it.reply_message + "("+it.created_at+")")
+                responseList.add("[" + it.user_id + "]" + it.reply_message + "(" + it.created_at + ")")
             }
         }
         val arrayAdapter = ArrayAdapter<String>(
