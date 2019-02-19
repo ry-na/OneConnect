@@ -6,7 +6,7 @@ https://gitforwindows.org/
 https://tortoisegit.org/  
 
 
-#### MacOS
+#### macOS
 >brew install git  
 
 ## クローン
