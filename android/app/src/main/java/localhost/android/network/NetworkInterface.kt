@@ -38,4 +38,11 @@ interface NetworkInterface {
             @Header("sid") sId: String = "",
             @Body body: HashMap<String, String>?
     ): Observable<List<ReplyResponseData>>
+
+    @Headers("Content-type: application/json")
+    @POST(Network.OPINION_API_URL + Network.REGISTER)
+    fun register(
+            @Header("sid") sId: String = "",
+            @Body body: HashMap<String, String>?
+    ): Observable<List<ReplyResponseData>>
 }

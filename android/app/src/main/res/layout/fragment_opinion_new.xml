@@ -45,15 +45,15 @@
                 android:text="場所：(未実装)" />
 
             <EditText
-                android:id="@+id/new_box"
+                android:id="@+id/new_box2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="意見...." />
+                android:hint="内容を入力...."
+                android:inputType="textPersonName" />
 
             <Button
-                android:id="@+id/connect_button"
+                android:id="@+id/sendnew_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.04"

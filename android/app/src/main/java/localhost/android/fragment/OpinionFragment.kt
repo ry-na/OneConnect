@@ -41,7 +41,7 @@ class OpinionFragment : DialogFragment() {
             // 背景を透明にする
             dialog_object.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            dialog_object.connect_button.setOnClickListener {
+            dialog_object.sendnew_button.setOnClickListener {
                 //TODO:返信ボタン押下
                 val reply = dialog_object.reply_box2.text.toString()
 

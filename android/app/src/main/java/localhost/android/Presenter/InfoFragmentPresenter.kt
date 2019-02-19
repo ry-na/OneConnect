@@ -16,6 +16,51 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class InfoFragmentPresenter {
+    fun register(context : Context,m:String,lat:Double,lng:Double,
+                  callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
+        val retrofit = NetworkService.getRetrofit()
+        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
+        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
+        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
+        var post = HashMap<String,String>().apply{
+            put("lat",String.format("%.6f", lat))
+            put("lon",String.format("%.6f", lng))
+            put("opinion_message",m)
+        }
+        retrofit.create(NetworkInterface::class.java)
+                .register(SID,post)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<List<ReplyResponseData?>>() {
+                    /**
+                     * 完了
+                     */
+                    override fun onCompleted() {
+                        println("OK")
+                    }
+
+                    /**
+                     * 失敗
+                     */
+                    override fun onError(e: Throwable?) {
+                        e!!.printStackTrace()
+                        if (e is HttpException) {
+                            val a = object : Annotation {}
+                            callback(false, retrofit.responseBodyConverter<List<ReplyResponseData?>>(ReplyResponseData::class.java, arrayOf(a))
+                                    .convert(e.response().errorBody()))
+                        } else callback(false, listOf(ReplyResponseData()))
+                    }
+
+                    /**
+                     * 成功
+                     */
+                    override fun onNext(t: List<ReplyResponseData?>) {
+                        callback(true, t)
+                    }
+                })
+    }
+
     fun sendReply(context : Context,id : String,m:String,
                   callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()

@@ -47,7 +47,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/connect_button"
+            android:id="@+id/sendnew_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"

@@ -39,7 +39,7 @@ class InfoFragment : DialogFragment() {
             it.setContentView(R.layout.fragment_info)
             // 背景を透明にする
             it.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            it.connect_button.setOnClickListener {
+            it.sendnew_button.setOnClickListener {
                 //TODO:コネクトボタン押下
                 // TODO: IDを取得できるようにする
           //      presenter.getReply(context,(hashMapOf("id" to id.toString())), { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) });
