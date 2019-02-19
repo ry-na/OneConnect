@@ -74,7 +74,7 @@ class OpinionFragment : DialogFragment() {
         response.forEach {
             if (it is ReplyResponseData) {
                 println(it.toString())
-                responseList.add("$it.user_id $it.reply_message  $it.created_at")
+                responseList.add("[" + it.user_id+"]"+it.reply_message + "("+it.created_at+")")
             }
         }
         val arrayAdapter = ArrayAdapter<String>(

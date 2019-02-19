@@ -7,10 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -29,7 +26,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val places: ArrayList<Place> = ArrayList()
     private val presenter = MainActivityPresenter()
-    val idlist = mutableListOf<Int>()
+    val idlist = kotlin.collections.HashMap<String , Int>()
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -39,15 +36,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             setMaxZoomPreference(19.0f)
             val d = LatLng(35.455865, 139.633103)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d, 12F))
+            var i=1
             for (p in places) {
                 val ll = LatLng(p.lat.toDouble(), p.lng.toDouble())
-                googleMap.addMarker(MarkerOptions()
+
+             var   m= googleMap.addMarker(MarkerOptions()
                         .position(ll)
                         .title(p.title)
                         .snippet(p.type.toString() + p.detail)
                         .icon(BitmapDescriptorFactory.defaultMarker(if (p.type == 0) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_BLUE)) //TODO: 仮に色分け
                 )
-                idlist.add(p.id)
+                idlist.put(m.id,p.id)
+                i++
             }
             // TODO: IDをFragment側で取得できるようにする
             setOnMapLongClickListener { latlng ->
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     newFragment.show(supportFragmentManager, marker.title + "," + detail)
                 } else if (marker.snippet.substring(0, 1).equals("1")) { //意見
                     var newFragment = OpinionFragment()
-                    newFragment.show(supportFragmentManager, marker.title + "," + detail + "," + idlist.get(0))
+                    newFragment.show(supportFragmentManager, marker.title + "," + detail + "," + idlist.get(marker.id))
                 }
                 false
             }
@@ -79,15 +79,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         //TODO:Placesに追加
         //仮データ
         val p = Place()
-        p.run {
+     /*   p.run {
             id = 0
             type = 0
             title = "テスト"
             detail = "ああああ"
             lat = 35.774337
             lng = 139.707746
-        }
-        places.add(p)
+        }*/
+     //   places.add(p)
         presenter.getOpinion(this, { status: Boolean, response: List<OpinionResponseData?> -> opinionResult(status, response) })
         mf = MapFragment.newInstance()
         mf.getMapAsync(this@MainActivity)
