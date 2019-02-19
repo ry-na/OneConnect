@@ -29,22 +29,22 @@ class Opinion_new : DialogFragment() {
     var lng = 0.0
     lateinit var c: Context
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        Dialog(activity).let {d->
+        Dialog(activity).let { dialog_object ->
             // タイトル非表示
-            d.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog_object.window!!.requestFeature(Window.FEATURE_NO_TITLE)
             // フルスクリーン
-            d.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-            d.setContentView(R.layout.fragment_opinion_new)
+            dialog_object.window!!.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+            dialog_object.setContentView(R.layout.fragment_opinion_new)
             // 背景を透明にする
-            d.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            d.sendnew_button.setOnClickListener {
+            dialog_object.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog_object.sendnew_button.setOnClickListener {
                 //TODO:発信ボタン押下
-                val send = d.new_box2.text.toString()
-                presenter.register(c, send, lat,lng,{ status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
+                val send = dialog_object.new_box2.text.toString()
+                presenter.register(c, send, lat, lng, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
             }
-            d.close_button.setOnClickListener { dismiss() }
-            d.title.text = "場所：" + lat + "," + lng
-            return d
+            dialog_object.close_button.setOnClickListener { dismiss() }
+            dialog_object.title.text = "場所：" + lat + "," + lng
+            return dialog_object
         }
     }
 
@@ -52,12 +52,14 @@ class Opinion_new : DialogFragment() {
         c = context
         super.onAttach(context)
     }
+
     override fun show(m: android.support.v4.app.FragmentManager, tag: String) {
         super.show(m, tag)
         val data = tag.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         this.lat = data[0].toDouble()
         this.lng = data[1].toDouble()
     }
+
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
 
     }
