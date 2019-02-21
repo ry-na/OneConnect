@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.activity_login.*
 import localhost.android.Presenter.LoginActivityPresenter
 import java.util.*
 import android.view.animation.*
+import android.content.Intent
+
+
 
 
 /**
@@ -33,6 +36,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         presenter = LoginActivityPresenter(this)
+
+        val mRegisterButton = findViewById(R.id.register_button) as Button
+        mRegisterButton.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         password_text.setOnEditorActionListener(TextView.OnEditorActionListener { textView, id, keyEvent ->
             if (id == R.id.login || id == EditorInfo.IME_NULL) {
