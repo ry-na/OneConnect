@@ -46,7 +46,7 @@ class UserController extends V1Controller
     }
 
     /**
-     * Class for login processing
+     * Function for login processing
      *
      * @param Request $request
      *
