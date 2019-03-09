@@ -42,7 +42,33 @@ class UserController extends V1Controller
         }
         User::register($request->all());
 
-        return $this->json();
+
+
+        $loginUser = User::all()->where(
+            User::EMAIL,
+            $request->{User::EMAIL}
+        )->where(User::PASS, $request->{User::PASS})->first();
+        if (!$loginUser) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => trans(
+                        'errors.not_exist',
+                        ['attribute' => 'user']
+                    )
+                ]
+            );
+        }
+        Auth::login($loginUser);
+
+        return $this->json(
+            200,
+            [
+                [
+                    Session::SESSION_ID => Session::register($loginUser, $request->ip())
+                ]
+            ]
+        );
     }
 
     /**

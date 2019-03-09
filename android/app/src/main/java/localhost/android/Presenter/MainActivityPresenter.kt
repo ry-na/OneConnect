@@ -20,8 +20,8 @@ import rx.schedulers.Schedulers
 class MainActivityPresenter {
     fun getOpinion(context: Context, callback: (status: Boolean, response: List<OpinionResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
-    val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-       // val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
+        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        // val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
         val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
         val SID_ = Base64.decode(sharedPreferences.getString("SID", "AAAAAAAA"), Base64.DEFAULT)
         val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "AAAAAA" //Session ID
@@ -48,6 +48,7 @@ class MainActivityPresenter {
                                     .convert(e.response().errorBody()))
                         } else callback(false, listOf(OpinionResponseData()))
                     }
+
                     /**
                      * 成功
                      */

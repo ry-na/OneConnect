@@ -20,7 +20,6 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 import java.util.regex.Pattern
 
-@Suppress("UNREACHABLE_CODE")
 class LoginActivityPresenter(private val loginActivity: LoginActivity) {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -48,7 +47,6 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                 val digest = MessageDigest.getInstance("SHA-256")
                 digest.update(password.toByteArray())
                 return bytesToHexString(digest.digest()) //SHA-256ハッシュ化
-                digest.update(password.toByteArray())
             } catch (e: NoSuchAlgorithmException) {
                 e.printStackTrace()
                 return ""

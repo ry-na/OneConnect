@@ -64,7 +64,7 @@ class OpinionController extends V1Controller
      *
      * @return mixed
      */
-    public function register(Request $request)
+    public function newOpinion(Request $request)
     {
         $validator = Validator::make(
             $request->all(),

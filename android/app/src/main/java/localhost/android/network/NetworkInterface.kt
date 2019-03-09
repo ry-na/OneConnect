@@ -20,8 +20,15 @@ interface NetworkInterface {
     ): Observable<List<LoginResponseData>>
 
     @Headers("Content-type: application/json")
+    @POST(Network.USER_API_URL + Network.REGISTER)
+    fun register(
+            @Header("sid") sId: String = "",
+            @Body body: HashMap<String, String>?
+    ): Observable<List<RegisterResponseData>>
+
+    @Headers("Content-type: application/json")
     @GET(Network.OPINION_API_URL + Network.GET)
-    public fun opinion(
+    fun opinion(
             @Header("sid") sId: String = ""
     ): Observable<List<OpinionResponseData>>
 
@@ -40,9 +47,10 @@ interface NetworkInterface {
     ): Observable<List<ReplyResponseData>>
 
     @Headers("Content-type: application/json")
-    @POST(Network.OPINION_API_URL + Network.REGISTER)
-    fun register(
+    @POST(Network.OPINION_API_URL + Network.NEW_OPINION)
+    fun newOpinion(
             @Header("sid") sId: String = "",
             @Body body: HashMap<String, String>?
-    ): Observable<List<ReplyResponseData>>
+    ): Observable<List<ReplyResponseData>>//TODO:リファクタ
+    //TODO:0304の次 replyとかの名前どうにかする
 }

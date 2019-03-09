@@ -3,7 +3,6 @@ package localhost.android
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -25,8 +24,6 @@ import android.content.Intent
  * A login screen that offers login via email/password.
  */
 class LoginActivity : AppCompatActivity() {
-
-
     private val handler = Handler()
     // UI references.
     private lateinit var presenter: LoginActivityPresenter
@@ -58,7 +55,6 @@ class LoginActivity : AppCompatActivity() {
         Thread(Runnable {
             if (!presenter.initLogin()) {
                 handler.post {
-
                     val x = login_logo.left
                     val left = login_logo.left.toFloat()
                     val top = login_logo.top.toFloat()
@@ -87,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or newOpinion the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
@@ -107,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
         var cancel = false
 
         // Check for a valid password, if the user entered one.
-        if (!LoginActivityPresenter.isPasswordValid(password)) {
+        if (!LoginActivityPresenter.isPasswordValid(password)) {            //TODO:リファクタ候補 UserModelを使う
             password_text.error = getString(R.string.error_invalid_password)
             password_text.requestFocus()
             cancel = true
@@ -128,11 +124,11 @@ class LoginActivity : AppCompatActivity() {
         // Show a progress spinner, and kick off a background task to
         // perform the user login attempt.
         showProgress(true)
-        val m = HashMap<String, String>().apply {
+        val requestData = HashMap<String, String>().apply {
             put("email", email)
             put("pass", LoginActivityPresenter.Hashing(password))//SHA-256ハッシュ化
         }
-        presenter.sendLoginRequest(m)
+        presenter.sendLoginRequest(requestData)
 
         //presenter.mAuthTask = presenter.UserLoginTask(email, password)
         //presenter.mAuthTask!!.execute(null as Void?)

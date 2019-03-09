@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.view.*
-import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_opinion_new.*
 import localhost.android.Presenter.InfoFragmentPresenter
 
@@ -40,7 +39,7 @@ class Opinion_new : DialogFragment() {
             dialog_object.sendnew_button.setOnClickListener {
                 //TODO:発信ボタン押下
                 val send = dialog_object.new_box2.text.toString()
-                presenter.register(c, send, lat, lng, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
+                presenter.newOpinion(c, send, lat, lng, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
             }
             dialog_object.close_button.setOnClickListener { dismiss() }
             dialog_object.title.text = "場所：" + lat + "," + lng

@@ -23,7 +23,7 @@ Route::group(['prefix' => \App\Http\Controllers\Api\V1\V1Controller::PREFIX], fu
             Route::get('get', 'Api\V1\OpinionController@get');
             Route::get('getReply', 'Api\V1\OpinionController@getReply');
             Route::post('reply', 'Api\V1\OpinionController@reply');
-            Route::post('register', 'Api\V1\OpinionController@register');
+            Route::post('newOpinion', 'Api\V1\OpinionController@newOpinion');
         });
     });
 });
