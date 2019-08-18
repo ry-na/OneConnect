@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_key">aaaa</string>
     <string name="app_name">ONE CONNECT</string>
     <string name="talkButton">トーク</string>
     <string name="mypageButton">マイページ</string>

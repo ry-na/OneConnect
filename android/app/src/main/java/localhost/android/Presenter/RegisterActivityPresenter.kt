@@ -4,6 +4,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Base64
+import android.view.View
+import android.widget.Toast
+import kotlinx.android.synthetic.main.content_register.*
 import localhost.android.MainActivity
 import localhost.android.RegisterActivity
 import localhost.android.model.RegisterResponseData
@@ -39,6 +42,7 @@ class RegisterActivityPresenter(private val registerActivity: RegisterActivity) 
                      * 失敗
                      */
                     override fun onError(e: Throwable?) {
+
                         e!!.printStackTrace()
                         if (e is HttpException) {
                             val a = object : Annotation {}
@@ -58,6 +62,7 @@ class RegisterActivityPresenter(private val registerActivity: RegisterActivity) 
     }
 
     fun registerResult(status: Boolean, response: List<RegisterResponseData?>?) {
+        registerActivity.progressBar_register.visibility= View.INVISIBLE
         if (status) {
             //ログイン成功
             val editor = sharedPreferences.edit()
@@ -73,7 +78,8 @@ class RegisterActivityPresenter(private val registerActivity: RegisterActivity) 
             registerActivity.startActivity(intent)
         } else {
             //TODO :エラーメッセージ表示
-            //registerActivity.setEmailError("エラー内容")
+         Toast.makeText(registerActivity,"エラーが発生しました",Toast.LENGTH_SHORT).show()
+
         }
         //ret
 
