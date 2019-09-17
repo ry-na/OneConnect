@@ -22,8 +22,10 @@ Route::group(['prefix' => \App\Http\Controllers\Api\V1\V1Controller::PREFIX], fu
         Route::group(['prefix' => \App\Http\Controllers\Api\V1\OpinionController::PREFIX], function () {
             Route::get('get', 'Api\V1\OpinionController@get');
             Route::get('getReply', 'Api\V1\OpinionController@getReply');
+            Route::get('isParticipant', 'Api\V1\OpinionController@isParticipant');
             Route::post('reply', 'Api\V1\OpinionController@reply');
             Route::post('newOpinion', 'Api\V1\OpinionController@newOpinion');
+            Route::post('participant', 'Api\V1\OpinionController@participant');
         });
     });
 });

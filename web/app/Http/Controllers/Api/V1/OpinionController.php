@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Opinion;
+use App\Models\Participant;
 use App\Models\Session;
 use App\Models\Reply;
 use Illuminate\Http\Request;
@@ -154,6 +155,90 @@ class OpinionController extends V1Controller
             200,
             [
                 Reply::CREATED_AT => $reply->{Reply::CREATED_AT}
+            ]
+        );
+    }
+
+    /**
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function participant(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                Participant::OPINION_ID => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => $validator->errors()->all()
+                ]
+            );
+        }
+        $participant = new Participant();
+        $participant{Participant::USER_ID} = Session::sessionIdToUserId($request);
+        $participant{Participant::OPINION_ID} = $request[Participant::OPINION_ID];
+        if (!$participant->save()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => "Insert失敗"
+                ]
+            );
+        }
+
+        return $this->json(
+            200,
+            [
+                Participant::CREATED_AT => $participant->{Participant::CREATED_AT}
+            ]
+        );
+    }
+
+    /**
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function isParticipant(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                Participant::OPINION_ID => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => $validator->errors()->all()
+                ]
+            );
+        }
+        $participant = Participant::where(Participant::USER_ID, Session::sessionIdToUserId($request))
+            ->where(Participant::OPINION_ID, $request[Participant::OPINION_ID])
+            ->first();
+        if ($participant == null) {
+            return $this->json(
+                200,
+                [
+                    Participant::IS_PARTICIPANT => false
+                ]
+            );
+        }
+
+        return $this->json(
+            200,
+            [
+                Participant::IS_PARTICIPANT => true
             ]
         );
     }
