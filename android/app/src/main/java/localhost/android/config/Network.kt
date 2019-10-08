@@ -17,5 +17,7 @@ class Network {
         const val GET = "get"
         const val GET_REPLY = "getReply"
         const val REPLY = "reply"
+        const val PARTICIPANT = "Participant"
+      const val ISPARTICIPANT = "isParticipant"
     }
 }

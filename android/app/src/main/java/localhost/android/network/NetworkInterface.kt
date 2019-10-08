@@ -40,6 +40,14 @@ interface NetworkInterface {
     ): Observable<List<ReplyResponseData>>
 
     @Headers("Content-type: application/json")
+    @GET(Network.OPINION_API_URL + Network.ISPARTICIPANT)
+    fun isParticipant(
+            @Header("sid") sId: String = "",
+            @Query("opinion_id") oId: String
+    ): Observable<List<ReplyResponseData>>
+
+
+    @Headers("Content-type: application/json")
     @POST(Network.OPINION_API_URL + Network.REPLY)
     fun reply(
             @Header("sid") sId: String = "",
@@ -53,4 +61,11 @@ interface NetworkInterface {
             @Body body: HashMap<String, String>?
     ): Observable<List<ReplyResponseData>>//TODO:リファクタ
     //TODO:0304の次 replyとかの名前どうにかする
+
+    @Headers("Content-type: application/json")
+    @POST(Network.OPINION_API_URL + Network.PARTICIPANT)
+    fun participant(
+            @Header("sid") sId: String = "",
+            @Body body: HashMap<String, String>?
+    ): Observable<List<ReplyResponseData>>
 }
