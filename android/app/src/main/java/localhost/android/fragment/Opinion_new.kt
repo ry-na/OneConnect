@@ -22,7 +22,8 @@ import localhost.android.model.ReplyResponseData
  * Use the [Opinion_new.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Opinion_new : DialogFragment() {
+class
+Opinion_new : DialogFragment() {
     private val presenter = InfoFragmentPresenter()
     var lat = 0.0
     var lng = 0.0

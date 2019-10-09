@@ -47,7 +47,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="131dp"
             android:layout_weight="0.19"
             android:orientation="vertical">
 
@@ -68,6 +68,12 @@
                 android:elevation="0dp"
                 android:text="返信する"
                 android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/func_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="参加する/完了する" />
         </LinearLayout>
 
         <!-- メッセージ -->

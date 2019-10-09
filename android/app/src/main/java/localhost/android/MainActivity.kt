@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val places: ArrayList<Place> = ArrayList()
     private val presenter = MainActivityPresenter()
     val idlist = kotlin.collections.HashMap<String , Int>()
+    val userlist = kotlin.collections.HashMap<String , Int>()
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -47,11 +48,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         .icon(BitmapDescriptorFactory.defaultMarker(if (p.type == 0) BitmapDescriptorFactory.HUE_RED else BitmapDescriptorFactory.HUE_BLUE)) //TODO: 仮に色分け
                 )
                 idlist.put(m.id,p.id)
+                userlist.put(m.id,p.user_id)
                 i++
             }
             // TODO: IDをFragment側で取得できるようにする
             setOnMapLongClickListener { latlng ->
                 var newFragment = Opinion_new()
+                //tagに情報を渡す
                 newFragment.show(supportFragmentManager, latlng.latitude.toString() + "," + latlng.longitude.toString() )
             }
             setOnMarkerClickListener { marker ->
@@ -62,7 +65,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     newFragment.show(supportFragmentManager, marker.title + "," + detail)
                 } else if (marker.snippet.substring(0, 1).equals("1")) { //意見
                     var newFragment = OpinionFragment()
-                    newFragment.show(supportFragmentManager, marker.title + "," + detail + "," + idlist.get(marker.id))
+                    //tagに情報を渡す
+                    newFragment.show(supportFragmentManager, marker.title + "," + detail + "," + idlist.get(marker.id) +","+  userlist.get(marker.id))
                 }
                 false
             }
@@ -148,6 +152,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     detail = data.opinion_message
                     lat = data.lat.toDouble()
                     lng = data.lon.toDouble()
+                    user_id = data.user_id.toInt()
                 }
                 places.add(p)
             }
