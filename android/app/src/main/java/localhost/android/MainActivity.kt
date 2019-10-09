@@ -1,6 +1,7 @@
 package localhost.android
 
 import android.app.FragmentTransaction
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val presenter = MainActivityPresenter()
     val idlist = kotlin.collections.HashMap<String , Int>()
     val userlist = kotlin.collections.HashMap<String , Int>()
+    var user_id = null
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -80,6 +82,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(tool_bar)
+        user_id = intent.getStringExtra("user_id") as Nothing?
         //TODO:Placesに追加
         //仮データ
         val p = Place()

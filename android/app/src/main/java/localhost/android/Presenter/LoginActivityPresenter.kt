@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Base64
+import kotlinx.android.synthetic.main.content_register.*
 import localhost.android.LoginActivity
 import localhost.android.MainActivity
 import localhost.android.model.LoginResponseData
@@ -119,6 +120,7 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
             //TODO: メイン画面に推移する
             val intent = Intent(loginActivity, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra("user_id",loginActivity.email_text.text)
             loginActivity.startActivity(intent)
         } else {
             //TODO :エラーメッセージ表示
