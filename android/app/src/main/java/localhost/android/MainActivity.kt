@@ -4,6 +4,7 @@ import android.app.FragmentTransaction
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
@@ -28,8 +29,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val places: ArrayList<Place> = ArrayList()
     private val presenter = MainActivityPresenter()
     val idlist = kotlin.collections.HashMap<String , Int>()
-    val userlist = kotlin.collections.HashMap<String , Int>()
-    var user_id = null
+    val userlist = kotlin.collections.HashMap<String , String>()
+    var user_id : String? = ""
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map)
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(tool_bar)
-        user_id = intent.getStringExtra("user_id") as Nothing?
+        user_id = intent.getStringExtra("user_id").toString()
         //TODO:Placesに追加
         //仮データ
         val p = Place()
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     detail = data.opinion_message
                     lat = data.lat.toDouble()
                     lng = data.lon.toDouble()
-                    user_id = data.user_id.toInt()
+                    user_id = data.user_id
                 }
                 places.add(p)
             }

@@ -1,5 +1,6 @@
 package localhost.android.fragment
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -9,9 +10,11 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_opinion.*
+import localhost.android.MainActivity
 import localhost.android.Presenter.InfoFragmentPresenter
 
 import localhost.android.R
@@ -25,14 +28,16 @@ import localhost.android.model.ReplyResponseData
  * Use the [OpinionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class OpinionFragment : DialogFragment() {
+class OpinionFragment : DialogFragment()  {
     private var title = ""
     private var detail = ""
     private var oId = ""
+    private var user_id = ""
     private val presenter = InfoFragmentPresenter()
     lateinit var c: Context
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Dialog(activity).let { dialog_object ->
+
             // タイトル非表示
             dialog_object.window!!.requestFeature(Window.FEATURE_NO_TITLE)
             // フルスクリーン
@@ -52,6 +57,13 @@ class OpinionFragment : DialogFragment() {
             }
             dialog_object.close_button.setOnClickListener { dismiss() }
             (dialog_object.findViewById(R.id.m_title) as TextView).text = title
+            //func_button
+            if ((activity as MainActivity).user_id == user_id ){
+                (dialog_object.findViewById(R.id.func_button) as Button).text = "完了"
+            }else {
+                (dialog_object.findViewById(R.id.func_button) as Button).text = "参加"
+
+            }
             return dialog_object
         }
     }
@@ -68,6 +80,8 @@ class OpinionFragment : DialogFragment() {
         this.title = data[0]
         this.detail = data[1]
         this.oId = data[2]
+        this.user_id = data[3]
+
     }
 
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {

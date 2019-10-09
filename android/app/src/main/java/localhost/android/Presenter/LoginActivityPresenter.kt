@@ -20,6 +20,9 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 import java.util.regex.Pattern
+import android.os.Bundle
+
+
 
 class LoginActivityPresenter(private val loginActivity: LoginActivity) {
     /**
@@ -120,7 +123,9 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
             //TODO: メイン画面に推移する
             val intent = Intent(loginActivity, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra("user_id",loginActivity.email_text.text)
+            val extras = Bundle()
+            extras.putString("user_id", loginActivity.email_text.text.toString())
+            intent.putExtras(extras)
             loginActivity.startActivity(intent)
         } else {
             //TODO :エラーメッセージ表示
