@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Base64
+import localhost.android.model.ParticipantResponseData
 import localhost.android.model.ReplyResponseData
 import localhost.android.network.NetworkInterface
 import localhost.android.network.NetworkService
@@ -56,6 +57,50 @@ class InfoFragmentPresenter {
                      * 成功
                      */
                     override fun onNext(t: List<ReplyResponseData?>) {
+                        callback(true, t)
+                    }
+                })
+    }
+
+    fun Participant(context: Context, id: String, m: String,
+                  callback: (status: Boolean, response: List<ParticipantResponseData?>) -> Unit) {
+        val retrofit = NetworkService.getRetrofit()
+        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
+        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
+        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
+        var post = HashMap<String, String>().apply {
+            put("reply_message", m)
+            put("opinion_id", id)
+        }
+        retrofit.create(NetworkInterface::class.java)
+                .participant(SID, post)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<List<ParticipantResponseData?>>() {
+                    /**
+                     * 完了
+                     */
+                    override fun onCompleted() {
+                        println("OK")
+                    }
+
+                    /**
+                     * 失敗
+                     */
+                    override fun onError(e: Throwable?) {
+                        e!!.printStackTrace()
+                        if (e is HttpException) {
+                            val a = object : Annotation {}
+                            callback(false, retrofit.responseBodyConverter<List<ParticipantResponseData?>>(ParticipantResponseData::class.java, arrayOf(a))
+                                    .convert(e.response().errorBody()))
+                        } else callback(false, listOf(ParticipantResponseData()))
+                    }
+
+                    /**
+                     * 成功
+                     */
+                    override fun onNext(t: List<ParticipantResponseData?>) {
                         callback(true, t)
                     }
                 })

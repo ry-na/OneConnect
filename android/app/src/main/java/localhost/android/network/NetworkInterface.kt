@@ -67,5 +67,5 @@ interface NetworkInterface {
     fun participant(
             @Header("sid") sId: String = "",
             @Body body: HashMap<String, String>?
-    ): Observable<List<ReplyResponseData>>
+    ): Observable<List<ParticipantResponseData>>
 }

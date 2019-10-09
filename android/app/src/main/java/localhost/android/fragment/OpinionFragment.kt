@@ -18,6 +18,7 @@ import localhost.android.MainActivity
 import localhost.android.Presenter.InfoFragmentPresenter
 
 import localhost.android.R
+import localhost.android.model.ParticipantResponseData
 import localhost.android.model.ReplyResponseData
 
 /**
@@ -55,6 +56,15 @@ class OpinionFragment : DialogFragment()  {
 
                 presenter.getReply(c, oId, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })
             }
+            dialog_object.func_button.setOnClickListener {
+                //TODO:完了/参加ボタン押下
+                if ((activity as MainActivity).user_id == user_id ){
+                    //完了ボタン
+                }else {
+                    //参加ボタン
+                    presenter.Participant(c,oId, "",{ status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part(status, response) })
+                }
+             }
             dialog_object.close_button.setOnClickListener { dismiss() }
             (dialog_object.findViewById(R.id.m_title) as TextView).text = title
             //func_button
@@ -83,7 +93,9 @@ class OpinionFragment : DialogFragment()  {
         this.user_id = data[3]
 
     }
+    private fun replyResult_part(status: Boolean, response: List<ParticipantResponseData?>) {
 
+    }
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
         if (!status) return
         //TODO: ここから仮実装。デザイン実装とともに作り直す必要あり
