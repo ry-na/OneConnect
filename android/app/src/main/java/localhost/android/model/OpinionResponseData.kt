@@ -8,7 +8,7 @@ import java.io.Serializable
  */
 data class OpinionResponseData(
         val id: String = "",
-        val created_at: String = "",
+        val created_at: String? = "",
         val event_id: String? = "",
         val lat: String = "",
         val lon: String = "",

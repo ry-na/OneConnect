@@ -62,15 +62,14 @@ class InfoFragmentPresenter {
                 })
     }
 
-    fun Participant(context: Context, id: String, m: String,
-                  callback: (status: Boolean, response: List<ParticipantResponseData?>) -> Unit) {
+    fun Participant(context: Context, id: String,
+                  callback: (status: Boolean, r: List<ParticipantResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
         val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
         val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
         val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         var post = HashMap<String, String>().apply {
-            put("reply_message", m)
             put("opinion_id", id)
         }
         retrofit.create(NetworkInterface::class.java)

@@ -62,7 +62,7 @@ class OpinionFragment : DialogFragment()  {
                     //完了ボタン
                 }else {
                     //参加ボタン
-                    presenter.Participant(c,oId, "",{ status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part(status, response) })
+                    presenter.Participant(c,oId ,{ status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part(status, response) })
                 }
              }
             dialog_object.close_button.setOnClickListener { dismiss() }
@@ -94,7 +94,8 @@ class OpinionFragment : DialogFragment()  {
 
     }
     private fun replyResult_part(status: Boolean, response: List<ParticipantResponseData?>) {
-
+        if (!status) return
+        this.dismiss()
     }
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
         if (!status) return
