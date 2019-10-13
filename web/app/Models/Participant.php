@@ -23,6 +23,8 @@ class Participant extends Model
      */
     const IS_PARTICIPANT = 'is_participant';
 
+    protected $fillable = ['created_at'];
+
 
     public static $gettableColumns = [
         self::CREATED_AT

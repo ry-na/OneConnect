@@ -196,7 +196,7 @@ class OpinionController extends V1Controller
         return $this->json(
             200,
             [
-                Participant::CREATED_AT => $participant->{Participant::CREATED_AT}
+                $participant
             ]
         );
     }
