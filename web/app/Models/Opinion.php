@@ -30,6 +30,10 @@ class Opinion extends BaseModel
      * LON
      */
     const LON = 'lon';
+    /**
+     * IS_COMPLETED
+     */
+    const IS_COMPLETED = 'is_completed';
 
     /**
      * @see https://readouble.com/laravel/5.3/ja/eloquent.html

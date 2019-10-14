@@ -60,6 +60,11 @@ class OpinionFragment : DialogFragment()  {
                 //TODO:完了/参加ボタン押下
                 if ((activity as MainActivity).user_id == user_id ){
                     //完了ボタン
+                    val callback = {responseData: ByteArray ->
+                        println(String(responseData))
+                        dismiss()
+                    }
+                    presenter.opinionComplete(c, oId, callback)
                 }else {
                     //参加ボタン
                     presenter.Participant(c,oId ,{ status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part(status, response) })
@@ -71,7 +76,8 @@ class OpinionFragment : DialogFragment()  {
             if ((activity as MainActivity).user_id == user_id ){
                 (dialog_object.findViewById(R.id.func_button) as Button).text = "完了"
             }else {
-                (dialog_object.findViewById(R.id.func_button) as Button).text = "参加"
+                (dialog_object.findViewById(R.id.func_button) as Button).text = "読み込み中..."
+                (dialog_object.findViewById(R.id.func_button) as Button).isEnabled = false
 
             }
             return dialog_object
@@ -81,6 +87,7 @@ class OpinionFragment : DialogFragment()  {
     override fun onAttach(context: Context) {
         c = context
         presenter.getReply(context, oId, { status: Boolean, response: List<ReplyResponseData?> -> replyResult(status, response) })//返信データ取得・表示
+    if((activity as MainActivity).user_id != user_id)    presenter.IsParticipant(context, oId, { status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part2(status, response) });//参加済みか
         super.onAttach(context)
     }
 
@@ -96,6 +103,16 @@ class OpinionFragment : DialogFragment()  {
     private fun replyResult_part(status: Boolean, response: List<ParticipantResponseData?>) {
         if (!status) return
         this.dismiss()
+    }
+    private fun replyResult_part2(status: Boolean, response: List<ParticipantResponseData?>) {
+        if (!status) return
+        if(response.get(0)!!.is_participant!!) {
+            (dialog.findViewById(R.id.func_button) as Button).text = "参加済"
+        }else{
+            (dialog.findViewById(R.id.func_button) as Button).text = "参加"
+            (dialog.findViewById(R.id.func_button) as Button).isEnabled = true
+        }
+
     }
     private fun replyResult(status: Boolean, response: List<ReplyResponseData?>) {
         if (!status) return

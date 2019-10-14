@@ -44,7 +44,7 @@ interface NetworkInterface {
     fun isParticipant(
             @Header("sid") sId: String = "",
             @Query("opinion_id") oId: String
-    ): Observable<List<ReplyResponseData>>
+    ): Observable<List<ParticipantResponseData>>
 
 
     @Headers("Content-type: application/json")

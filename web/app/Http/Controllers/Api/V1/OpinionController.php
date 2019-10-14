@@ -26,7 +26,9 @@ class OpinionController extends V1Controller
     {
         return $this->json(
             200,
-            Opinion::get(Opinion::$gettableColumns)
+            Opinion::where(Opinion::IS_COMPLETED, '!=', true)
+                ->orWhereNull(Opinion::IS_COMPLETED)
+                ->get(Opinion::$gettableColumns)
         );
     }
 
@@ -230,7 +232,9 @@ class OpinionController extends V1Controller
             return $this->json(
                 200,
                 [
+[
                     Participant::IS_PARTICIPANT => false
+]
                 ]
             );
         }
@@ -238,7 +242,39 @@ class OpinionController extends V1Controller
         return $this->json(
             200,
             [
+[
                 Participant::IS_PARTICIPANT => true
+]
+            ]
+        );
+    }
+
+    public function complete($id, Request $request)
+    {
+        $opinion = Opinion::where('id', $id)
+            ->where('user_id', Session::sessionIdToUserId($request))
+            ->first();
+        if (!$opinion) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => 'Your opinion is nof found'
+                ]
+            );
+        }
+        $opinion[Opinion::IS_COMPLETED] = true;
+        if (!$opinion->save()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => 'Your opinion cannot complete'
+                ]
+            );
+        }
+        return $this->json(
+            200,
+            [
+                "updated_at" => $opinion->updated_at
             ]
         );
     }
