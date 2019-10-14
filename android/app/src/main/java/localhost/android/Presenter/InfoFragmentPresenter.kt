@@ -15,22 +15,21 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.*
 import kotlin.collections.HashMap
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
+import localhost.android.config.Network
 
 class InfoFragmentPresenter {
     fun newOpinion(context: Context, m: String, lat: Double, lng: Double,
                    callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
-        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
-        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         var post = HashMap<String, String>().apply {
             put("lat", String.format("%.6f", lat))
             put("lon", String.format("%.6f", lng))
             put("opinion_message", m)
         }
         retrofit.create(NetworkInterface::class.java)
-                .newOpinion(SID, post)
+                .newOpinion(this.getSessionId(context), post)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<List<ReplyResponseData?>>() {
@@ -65,16 +64,12 @@ class InfoFragmentPresenter {
     fun Participant(context: Context, id: String, m: String,
                   callback: (status: Boolean, response: List<ParticipantResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
-        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
-        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         var post = HashMap<String, String>().apply {
             put("reply_message", m)
             put("opinion_id", id)
         }
         retrofit.create(NetworkInterface::class.java)
-                .participant(SID, post)
+                .participant(this.getSessionId(context), post)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<List<ParticipantResponseData?>>() {
@@ -109,16 +104,12 @@ class InfoFragmentPresenter {
     fun sendReply(context: Context, id: String, m: String,
                   callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
-        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
-        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         var post = HashMap<String, String>().apply {
             put("reply_message", m)
             put("opinion_id", id)
         }
         retrofit.create(NetworkInterface::class.java)
-                .reply(SID, post)
+                .reply(this.getSessionId(context), post)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<List<ReplyResponseData?>>() {
@@ -153,12 +144,8 @@ class InfoFragmentPresenter {
     fun getReply(context: Context, id: String,
                  callback: (status: Boolean, response: List<ReplyResponseData?>) -> Unit) {
         val retrofit = NetworkService.getRetrofit()
-        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val mKeyStoreManager: AndroidKeyStoreManager = AndroidKeyStoreManager(context)
-        val SID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
-        val SID: String = if (SID_.isNotEmpty()) String(mKeyStoreManager.decrypt(SID_)) else "" //Session ID
         retrofit.create(NetworkInterface::class.java)
-                .get_reply(SID, id)
+                .get_reply(this.getSessionId(context), id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<List<ReplyResponseData?>>() {
@@ -188,6 +175,32 @@ class InfoFragmentPresenter {
                         callback(true, t)
                     }
                 })
+    }
+
+    fun opinionComplete(context: Context, opinionId: String, callback: (responseData: ByteArray) -> Unit) {
+        this.getSessionId(context)
+        "${Network.BASE_URL}${Network.OPINION_API_URL}${opinionId}/finish"
+                .httpPost()
+                .header(hashMapOf("sid" to this.getSessionId(context)))
+                .response { request, response, result ->
+                    when (result) {
+                        is Result.Success -> {
+                            // レスポンスボディを表示
+                            callback(response.data)
+                        }
+                        is Result.Failure -> {
+                            println(result.getException().toString())
+                        }
+                    }
+        }
+
+    }
+
+    private fun getSessionId(context: Context): String {
+        val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val mKeyStoreManager = AndroidKeyStoreManager(context)
+        val sID_ = Base64.decode(sharedPreferences.getString("SID", ""), Base64.DEFAULT)
+        return if (sID_.isNotEmpty()) String(mKeyStoreManager.decrypt(sID_)) else "" //Session ID
     }
 }
 

@@ -60,6 +60,11 @@ class OpinionFragment : DialogFragment()  {
                 //TODO:完了/参加ボタン押下
                 if ((activity as MainActivity).user_id == user_id ){
                     //完了ボタン
+                    val callback = {responseData: ByteArray ->
+                        println(responseData.toString())
+                        dismiss()
+                    }
+                    presenter.opinionComplete(c, oId, callback)
                 }else {
                     //参加ボタン
                     presenter.Participant(c,oId, "",{ status: Boolean, response: List<ParticipantResponseData?> -> replyResult_part(status, response) })
