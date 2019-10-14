@@ -61,7 +61,7 @@ class OpinionFragment : DialogFragment()  {
                 if ((activity as MainActivity).user_id == user_id ){
                     //完了ボタン
                     val callback = {responseData: ByteArray ->
-                        println(responseData.toString())
+                        println(String(responseData))
                         dismiss()
                     }
                     presenter.opinionComplete(c, oId, callback)
