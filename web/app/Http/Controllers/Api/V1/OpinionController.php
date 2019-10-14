@@ -242,4 +242,34 @@ class OpinionController extends V1Controller
             ]
         );
     }
+
+    public function complete($id, Request $request)
+    {
+        $opinion = Opinion::where('id', $id)
+            ->where('user_id', Session::sessionIdToUserId($request))
+            ->first();
+        if (!$opinion) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => 'Your opinion is nof found'
+                ]
+            );
+        }
+        $opinion->is_completed = true;
+        if (!$opinion->save()) {
+            return $this->json(
+                400,
+                [
+                    static::ERROR => 'Your opinion cannot complete'
+                ]
+            );
+        }
+        return $this->json(
+            200,
+            [
+                "updated_at" => $opinion->updated_at
+            ]
+        );
+    }
 }
