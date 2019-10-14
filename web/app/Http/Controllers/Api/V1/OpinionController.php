@@ -26,7 +26,9 @@ class OpinionController extends V1Controller
     {
         return $this->json(
             200,
-            Opinion::get(Opinion::$gettableColumns)
+            Opinion::where(Opinion::IS_COMPLETED, '!=', true)
+                ->orWhereNull(Opinion::IS_COMPLETED)
+                ->get(Opinion::$gettableColumns)
         );
     }
 
@@ -256,7 +258,7 @@ class OpinionController extends V1Controller
                 ]
             );
         }
-        $opinion->is_completed = true;
+        $opinion[Opinion::IS_COMPLETED] = true;
         if (!$opinion->save()) {
             return $this->json(
                 400,
