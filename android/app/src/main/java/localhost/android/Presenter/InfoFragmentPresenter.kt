@@ -179,7 +179,7 @@ class InfoFragmentPresenter {
 
     fun opinionComplete(context: Context, opinionId: String, callback: (responseData: ByteArray) -> Unit) {
         this.getSessionId(context)
-        "${Network.BASE_URL}${Network.OPINION_API_URL}${opinionId}/finish"
+        "${Network.BASE_URL}${Network.OPINION_API_URL}${opinionId}/complete"
                 .httpPost()
                 .header(hashMapOf("sid" to this.getSessionId(context)))
                 .response { request, response, result ->
