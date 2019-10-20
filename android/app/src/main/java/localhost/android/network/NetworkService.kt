@@ -18,6 +18,7 @@ import android.net.ConnectivityManager
  */
 class NetworkService {
     companion object {
+
         /**
          * Retrofitオブジェクトを返却する関数
          * @return Retrofitオブジェクト

@@ -21,7 +21,15 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 import java.util.regex.Pattern
 import android.os.Bundle
-
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.FuelManager
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
+import localhost.android.config.Network
+import localhost.android.network.NetworkServiceV2
+import org.json.JSONObject
+import java.nio.charset.Charset
 
 
 class LoginActivityPresenter(private val loginActivity: LoginActivity) {
@@ -72,6 +80,38 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
     }
 
     fun sendLoginRequest(body: HashMap<String, String>?) {
+        //TODO: Fuel Implemented
+        // 非同期処理
+        ////////////////////////////
+        FuelManager.instance.removeAllResponseInterceptors()
+        val header: HashMap<String, String> = hashMapOf("sid" to "","Content-Type" to "application/json")  //HTTP HEADER
+
+        Fuel.post(Network.BASE_URL + Network.USER_API_URL + Network.LOGIN).header(header).body(JSONObject(body).toString()).response { request, response, result ->
+            when (result) {
+                is Result.Success -> {
+                    // レスポンスボディを表示
+                    val res= LoginResponseData()
+                    NetworkServiceV2<LoginResponseData>().ConvertResponse(res,result.value.toString(Charset.forName("UTF-8")))
+                    println("非同期処理の結果：" + result.value.toString(Charset.forName("UTF-8")))
+                    loginResult(true, res)
+                }
+                is Result.Failure -> {
+                    //Error Debug Message
+                    println("====HTTP ERROR!("+result.getException().exception.toString()+")====")
+                    println("URL:" + request.url)
+                    println("ResponseCode:" + result.error.response.statusCode)
+                    println("Message:" + result.error.message)
+                //    println("ResponseBody:" + String(result.response.data))
+                    println("==================")
+                    println("通信に失敗しました。")
+val res= LoginResponseData()
+                    NetworkServiceV2<LoginResponseData>().ConvertResponse(res,result.error.errorData.toString())
+                   // loginResult(false, listOf(result.error.response.body().asString("json")))
+                }
+            }
+        }
+        ////////////////////////////
+        if(true) return
         val retrofit = NetworkService.getRetrofit()
         retrofit.create(NetworkInterface::class.java)
                 .login("", body)    // TODO: 第1引数で if(sId == null) "" else sId こんな関数を呼ぶ
@@ -106,6 +146,35 @@ class LoginActivityPresenter(private val loginActivity: LoginActivity) {
                     }
                 })
     }
+
+    fun loginResult(status: Boolean, response: LoginResponseData) {
+        //mAuthTask = null
+        loginActivity.showProgress(false)
+
+        if (status) {
+            //ログイン成功
+            val editor = sharedPreferences.edit()
+            val SID = response.sid
+            val SID_ = mKeyStoreManager.encrypt(SID?.toByteArray())
+            editor.apply {
+                putString("SID", Base64.encodeToString(SID_, Base64.DEFAULT))
+                commit()
+            }
+            //TODO: メイン画面に推移する
+            val intent = Intent(loginActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            val extras = Bundle()
+            extras.putString("user_id", loginActivity.email_text.text.toString())
+            intent.putExtras(extras)
+            loginActivity.startActivity(intent)
+        } else {
+            //TODO :エラーメッセージ表示
+            loginActivity.setEmailError("エラー内容")
+        }
+        //return null
+    }
+
+
 
     fun loginResult(status: Boolean, response: List<LoginResponseData?>?) {
         //mAuthTask = null
